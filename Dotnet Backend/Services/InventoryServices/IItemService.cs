@@ -16,7 +16,7 @@ namespace exam_webapi.Services.Inventory
         public InventoryItem CreateItem(CreateIttemDTO currenItem)
         {
             InventoryItem nw = new(){
-                ItemId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 Name = currenItem.Name,
                 Description = currenItem.Description,
                 Quantity = currenItem.Quantity,
@@ -28,22 +28,22 @@ namespace exam_webapi.Services.Inventory
 
         public InventoryItem DeleteItem(Guid id)
         {
-            var old = _repo.Where(u => u.ItemId == id).SingleOrDefault();
+            var old = _repo.Where(u => u.Id == id).SingleOrDefault();
             _repo.Remove(old);
             return old;
         }
 
         public InventoryItem GetItem(Guid id)
         {
-            return _repo.Where(u => u.ItemId == id).SingleOrDefault();
+            return _repo.Where(u => u.Id == id).SingleOrDefault();
         }
 
         public InventoryItem UpdateItem(UpdateItemDTO currenItem)
         {
-            var old = _repo.Where(u => u.ItemId == currenItem.ItemId).SingleOrDefault();
+            var old = _repo.Where(u => u.Id == currenItem.ItemId).SingleOrDefault();
             int index = _repo.IndexOf(old);
             InventoryItem nw = new(){
-                ItemId = old.ItemId,
+                Id = old.Id,
                 Name = currenItem.Name,
                 Description = currenItem.Description,
                 Quantity = currenItem.Quantity,

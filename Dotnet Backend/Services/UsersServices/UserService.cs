@@ -15,7 +15,7 @@ namespace exam_webapi.Services.UserServices
         public User CreateUser(CreateUserDTO nwUser)
         {
             User nw = new User(){
-                UserId = _repo.Count + 1,
+                Id = _repo.Count + 1,
                 Name = nwUser.Name,
                 Phone = nwUser.Phone,
                 Email = nwUser.Email,
@@ -27,18 +27,18 @@ namespace exam_webapi.Services.UserServices
 
         public User GetUser(int id)
         {
-            return _repo.Where(u => u.UserId == id).SingleOrDefault();
+            return _repo.Where(u => u.Id == id).SingleOrDefault();
             
         }
 
         public User UpdateUser(UserDTO nwUser)
         {
-            User oldUser = _repo.Find(u => u.UserId == nwUser.UserId);
+            User oldUser = _repo.Find(u => u.Id == nwUser.UserId);
             if (oldUser != null)
             {
                 int index = _repo.IndexOf(oldUser);
                 User nw = new User(){
-                    UserId = _repo.Count + 1,
+                    Id = _repo.Count + 1,
                     Name = nwUser.Name,
                     Phone = nwUser.Phone,
                     Email = nwUser.Email,
@@ -54,7 +54,7 @@ namespace exam_webapi.Services.UserServices
 
         User IUserService.DeleteUser(int id)
         {
-            User oldUser = _repo.Find(u => u.UserId == id);
+            User oldUser = _repo.Find(u => u.Id == id);
 
             _repo.Remove(oldUser);
             return oldUser; 

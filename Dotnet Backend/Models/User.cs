@@ -7,10 +7,11 @@ namespace exam_webapi.Models
 {
     public class User
     {
-        public int UserId { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public UserType_Enum UserType { get; set; }
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
+        public List<InventoryItem>? items { get; set; }
     }
 }

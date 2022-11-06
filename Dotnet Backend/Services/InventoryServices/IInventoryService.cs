@@ -1,4 +1,5 @@
 
+using Dotnet.Backend.Models;
 using exam_webapi.DTOs.ItemDTOs;
 using exam_webapi.Models;
 
@@ -6,9 +7,9 @@ namespace exam_webapi.Services.Inventory
 {
     public interface IInventoryService
     {
-        InventoryItem GetItem(Guid id);
-        InventoryItem CreateItem (CreateIttemDTO currenItem);
-        InventoryItem UpdateItem (UpdateItemDTO currenItem);
-        InventoryItem DeleteItem (Guid id);
+        ServiceResponse<InventoryItem> GetItem(Guid id);
+        ServiceResponse<InventoryItem> CreateItem (CreateIttemDTO currenItem);
+        ServiceResponse<InventoryItem> UpdateItem (UpdateItemDTO currenItem);
+        ServiceResponse<InventoryItem> DeleteItem (Guid id);
     }
 }

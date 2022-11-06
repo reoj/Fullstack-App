@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import {useParams} from "react-router-dom"
 import TableDisplayer from "../../UI/TableDisplayer";
 import ItemSingle from "./ItemSingle";
 

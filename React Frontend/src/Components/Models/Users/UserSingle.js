@@ -5,6 +5,7 @@ import ModalContext from "../../../Context/modal-context";
 import ActionButtons from "../../UI/ActionButtons";
 import DeleteUser from "./DeleteUser";
 import EditUser from "./EditUser";
+import { editUserR } from "../../../Context/user-redux-slice";
 
 function UserSingle(props) {
   const context = useContext(ModalContext);
@@ -13,7 +14,7 @@ function UserSingle(props) {
     mc({
       onDisplay: true,
       title: "Editing User",
-      body: <EditUser item={{ id: props.idn, name: props.name, cl: props.cl}} />,
+      body: <EditUser inhf={editUserR} item={{ id: props.idn, name: props.name, cl: props.cl}} />,
     });
   }
   function onDeleteHandler(params) {

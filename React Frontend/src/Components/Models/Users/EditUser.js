@@ -4,7 +4,7 @@ import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/Modal";
 import ModalContext from "../../../Context/modal-context";
 import { useDispatch } from "react-redux";
-import { editUserR } from "../../../Context/user-redux-slice";
+
 
 function EditUser(props) {
   const modalCtx = useContext(ModalContext);
@@ -30,7 +30,7 @@ function EditUser(props) {
       return;
     }
     dsp(
-      editUserR({
+      props.inhf({
         id:props.item.id,
         name: namefieldRef.current.value,
         utype: clfieldRef.current.value,

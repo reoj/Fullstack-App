@@ -1,8 +1,7 @@
+using DotnetBackend.Models;
 using exam_webapi.DTOs.ItemDTOs;
 using exam_webapi.Models;
-using exam_webapi.Repositories;
 using exam_webapi.Services.Inventory;
-using exam_webapi.Services.UserServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace exam_webapi.Controllers
@@ -19,21 +18,21 @@ namespace exam_webapi.Controllers
         }
         
         [HttpPost]
-        public ActionResult<InventoryItem> CreateUser(CreateIttemDTO nwItem){
+        public ActionResult<ServiceResponse<InventoryItem>> CreateUser(CreateIttemDTO nwItem){
             return Ok(_inventory.CreateItem(nwItem));
             
         }
         [HttpGet("{id}")]
-        public ActionResult<InventoryItem> GetUser(Guid id){
+        public ActionResult<ServiceResponse<InventoryItem>> GetUser(Guid id){
             return Ok(_inventory.GetItem(id));
         }
         
         [HttpPut("{id}")]
-        public ActionResult<InventoryItem> UpdateUser(UpdateItemDTO nwItem){
+        public ActionResult<ServiceResponse<InventoryItem>> UpdateUser(UpdateItemDTO nwItem){
             return Ok(_inventory.UpdateItem(nwItem));
         }
         [HttpDelete("{id}")]
-        public ActionResult<InventoryItem> DeleteUser(Guid id){
+        public ActionResult<ServiceResponse<InventoryItem>> DeleteUser(Guid id){
             return Ok(_inventory.DeleteItem(id));
         }
 

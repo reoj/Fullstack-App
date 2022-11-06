@@ -1,4 +1,4 @@
-using Dotnet.Backend.Models;
+using DotnetBackend.Models;
 using exam_webapi.DTOs.ItemDTOs;
 using exam_webapi.Models;
 using exam_webapi.Repositories;

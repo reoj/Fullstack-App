@@ -6,6 +6,9 @@ using exam_webapi.Models;
 
 namespace exam_webapi.DTOs.UserDTOs
 {
+    /// <summary>
+    /// Data Transfer Object for User creation
+    /// </summary>
     public class CreateUserDTO
     {
         public string Name { get; set; } = string.Empty;

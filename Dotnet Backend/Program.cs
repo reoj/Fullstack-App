@@ -6,6 +6,8 @@ using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Introduces SQLite data context
 builder.Services.AddDbContext<DataContext>(op =>
 {
     op.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));

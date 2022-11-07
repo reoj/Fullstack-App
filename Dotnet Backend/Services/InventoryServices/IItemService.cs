@@ -2,83 +2,83 @@ using DotnetBackend.Models;
 using DotnetBackend.Services;
 using exam_webapi.DTOs.ItemDTOs;
 using exam_webapi.Models;
-using exam_webapi.Repositories;
-using exam_webapi.Services.UserServices;
+using Microsoft.EntityFrameworkCore;
+using users_items_backend.Context;
 
 namespace exam_webapi.Services.Inventory
 {
     public class ItemService : IInventoryService
     {
-        public List<InventoryItem> _repo { get; set; }
+        public DataContext _repo { get; set; }
 
-        public ItemService()
+        public ItemService(DataContext context)
         {
-            _repo = StaticData.InventoryContext;
+            _repo = context;
         }
-        public ServiceResponse<InventoryItem> CreateItem(CreateIttemDTO currenItem)
+        public async Task<ServiceResponse<InventoryItem>> CreateItem(CreateIttemDTO currenItem)
         {
 
-            Func<Object, InventoryItem> rawCreation = (obj) =>
-                {
-                    var ci = (CreateIttemDTO)obj;
-                    InventoryItem nw = new()
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = ci.Name,
-                        Description = ci.Description,
-                        Quantity = ci.Quantity,
-                        UserId = ci.UserId,
-                    };
-                    _repo.Add(nw);
-                    return nw;
-                };
-
-            return ServiceHelper<InventoryItem>.ActionHandler(rawCreation, currenItem);
-        }
-
-        public ServiceResponse<InventoryItem> DeleteItem(Guid id)
-        {
-            Func<Object, InventoryItem> rawElimination = (obj) =>
+            async Task<InventoryItem> rawCreation(object obj)
             {
-                var idn = (Guid)obj;
-                var old = _repo.Where(u => u.Id == idn).SingleOrDefault();
-                old = ServiceHelper<InventoryItem>.NoNullsAccepted(old);
-                _repo.Remove(old);
-                return old;
-            };
-            return ServiceHelper<InventoryItem>.ActionHandler(rawElimination, id);
-        }
-
-        public ServiceResponse<InventoryItem> GetItem(Guid id)
-        {
-            Func<Object, InventoryItem> rawGetter = (obj) =>
-            {
-                var idn = (Guid)obj;
-                var requested = _repo.Where(u => u.Id == idn).SingleOrDefault();
-                return ServiceHelper<InventoryItem>.NoNullsAccepted(requested);
-            };
-
-            return ServiceHelper<InventoryItem>.ActionHandler(rawGetter, id);
-        }
-        public ServiceResponse<InventoryItem> UpdateItem(UpdateItemDTO currenItem)
-        {
-            Func<Object, InventoryItem> rawUpdate = (obj) =>
-            {
-                var ci = (UpdateItemDTO)obj;
-                var old = _repo.Where(u => u.Id == ci.ItemId).SingleOrDefault();
-                old = ServiceHelper<InventoryItem>.NoNullsAccepted(old);
-                int index = _repo.IndexOf(old);
+                var ci = (CreateIttemDTO)obj;
                 InventoryItem nw = new()
                 {
-                    Id = old.Id,
+                    Id = Guid.NewGuid(),
                     Name = ci.Name,
                     Description = ci.Description,
                     Quantity = ci.Quantity,
                     UserId = ci.UserId,
                 };
-                return _repo[index] = nw;
-            };
-            return ServiceHelper<InventoryItem>.ActionHandler(rawUpdate, currenItem);
+                await _repo.Items.AddAsync(nw);
+                await _repo.SaveChangesAsync();
+                return nw;
+            }
+
+            return await ServiceHelper<InventoryItem>.ActionHandler(rawCreation, currenItem);
+        }
+
+        public async Task<ServiceResponse<InventoryItem>> DeleteItem(Guid id)
+        {
+            async Task<InventoryItem> rawElimination(object obj)
+            {
+                var idn = (Guid)obj;
+                var old = await _repo.Items.FirstOrDefaultAsync(u => u.Id == idn);
+                old = ServiceHelper<InventoryItem>.NoNullsAccepted(old);
+                _repo.Remove(old);
+                await _repo.SaveChangesAsync();
+                return old;
+            }
+            return await ServiceHelper<InventoryItem>.ActionHandler(rawElimination, id);
+        }
+
+        public async Task<ServiceResponse<InventoryItem>> GetItem(Guid id)
+        {
+            async Task<InventoryItem> rawGetter(object obj)
+            {
+                var idn = (Guid)obj;
+                var requested = await _repo.Items.FirstOrDefaultAsync(u => u.Id == idn);
+                return ServiceHelper<InventoryItem>.NoNullsAccepted(requested);
+            }
+
+            return await ServiceHelper<InventoryItem>.ActionHandler(rawGetter, id);
+        }
+        public async Task<ServiceResponse<InventoryItem>> UpdateItem(UpdateItemDTO currenItem)
+        {
+            async Task<InventoryItem> rawUpdate(object obj)
+            {
+                var ci = (UpdateItemDTO)obj;
+                var old = await _repo.Items.FirstOrDefaultAsync(u => u.Id == ci.ItemId);
+                old = ServiceHelper<InventoryItem>.NoNullsAccepted(old);
+
+                old.Quantity = ci.Quantity;
+                old.Name = ci.Name;
+                old.Description = ci.Description;
+                old.UserId = ci.UserId;
+
+                await _repo.SaveChangesAsync();
+                return old;
+            }
+            return await ServiceHelper<InventoryItem>.ActionHandler(rawUpdate, currenItem);
         }
     }
 }

@@ -7,9 +7,9 @@ namespace exam_webapi.Services.Inventory
 {
     public interface IInventoryService
     {
-        ServiceResponse<InventoryItem> GetItem(Guid id);
-        ServiceResponse<InventoryItem> CreateItem (CreateIttemDTO currenItem);
-        ServiceResponse<InventoryItem> UpdateItem (UpdateItemDTO currenItem);
-        ServiceResponse<InventoryItem> DeleteItem (Guid id);
+        Task<ServiceResponse<InventoryItem>> GetItem(Guid id);
+        Task<ServiceResponse<InventoryItem>> CreateItem(CreateIttemDTO currenItem);
+        Task<ServiceResponse<InventoryItem>> UpdateItem(UpdateItemDTO currenItem);
+        Task<ServiceResponse<InventoryItem>> DeleteItem(Guid id);
     }
 }

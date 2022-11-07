@@ -18,22 +18,26 @@ namespace exam_webapi.Controllers
         }
         
         [HttpPost]
-        public ActionResult<ServiceResponse<InventoryItem>> CreateUser(CreateIttemDTO nwItem){
-            return Ok(_inventory.CreateItem(nwItem));
+        public async Task<ActionResult<ServiceResponse<InventoryItem>>> CreateUser(CreateIttemDTO nwItem){
+            var result = await _inventory.CreateItem(nwItem);
+            return result.Successfull ? Ok(result) : NotFound(result);
             
         }
         [HttpGet("{id}")]
-        public ActionResult<ServiceResponse<InventoryItem>> GetUser(Guid id){
-            return Ok(_inventory.GetItem(id));
+        public async Task<ActionResult<ServiceResponse<InventoryItem>>> GetUser(Guid id){
+            var result = await _inventory.GetItem(id); 
+            return result.Successfull ? Ok(result) : NotFound(result);
         }
         
         [HttpPut("{id}")]
-        public ActionResult<ServiceResponse<InventoryItem>> UpdateUser(UpdateItemDTO nwItem){
-            return Ok(_inventory.UpdateItem(nwItem));
+        public async Task<ActionResult<ServiceResponse<InventoryItem>>> UpdateUser(UpdateItemDTO nwItem){
+            var result = await _inventory.UpdateItem(nwItem); 
+            return result.Successfull ? Ok(result) : NotFound(result);
         }
         [HttpDelete("{id}")]
-        public ActionResult<ServiceResponse<InventoryItem>> DeleteUser(Guid id){
-            return Ok(_inventory.DeleteItem(id));
+        public async Task<ActionResult<ServiceResponse<InventoryItem>>> DeleteUser(Guid id){
+            var result = await _inventory.DeleteItem(id);
+            return result.Successfull ? Ok(result) : NotFound(result);
         }
 
     }

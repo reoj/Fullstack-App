@@ -9,7 +9,8 @@ namespace DotnetBackend.Services
     public abstract class ServiceHelper<T>
     {
         #region Helpers
-        public static async Task<ServiceResponse<T>> ActionHandler(Func<object, Task<T>> fn, object arg)
+        public static async Task<ServiceResponse<T>> ActionHandler(
+            Func<object, Task<T>> fn, object arg)
         {
             var response = new ServiceResponse<T>();
             try
@@ -31,11 +32,12 @@ namespace DotnetBackend.Services
         {
             if (toCheck is null)
             {
-                throw new NullReferenceException($"No object could be found with that information");
+                throw new NullReferenceException(
+                    $"No object could be found with that information");
             }
             return toCheck;
         }
-        
+
         #endregion
     }
 }

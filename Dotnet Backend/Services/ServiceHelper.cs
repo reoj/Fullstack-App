@@ -9,22 +9,24 @@ namespace DotnetBackend.Services
     public abstract class ServiceHelper<T>
     {
         #region Helpers
-        public static ServiceResponse<T> ActionHandler(Func<Object, T> fn, Object arg)
+        public static async Task<ServiceResponse<T>> ActionHandler(Func<object, Task<T>> fn, object arg)
         {
             var response = new ServiceResponse<T>();
             try
             {
-                response.Body = fn(arg);
+                response.Body = await fn(arg);
+                response.Successfull = true;
             }
             catch (Exception err)
             {
                 response.Successfull = false;
                 string relevant =
-                    $"The request couldn't be completed because of the following error:{err.Message.ToString()}";
+                    $"The request couldn't be completed because of the following error:{err.Message}";
                 response.Message = relevant;
             }
             return response;
         }
+
         public static T NoNullsAccepted(T? toCheck)
         {
             if (toCheck is null)

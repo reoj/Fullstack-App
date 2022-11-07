@@ -3,82 +3,93 @@ using DotnetBackend.Services;
 using exam_webapi.DTOs.UserDTOs;
 using exam_webapi.Models;
 using exam_webapi.Repositories;
+using Microsoft.EntityFrameworkCore;
+using users_items_backend.Context;
 
 namespace exam_webapi.Services.UserServices
 {
-    public class UserService : IUserService
+    public class UserService :IUserService
     {
-        public List<User> _repo { get; set; }
+        public DataContext _repo { get; set; }
 
-        public UserService()
+        #region Constructor
+        public UserService(DataContext context)
         {
-            _repo = StaticData.UsersContext;
-        }
-        public ServiceResponse<User> CreateUser(CreateUserDTO nwUser)
+            _repo = context;
+        } 
+        #endregion
+
+        public async Task<ServiceResponse<User>> CreateUser(CreateUserDTO nwUser)
         {
-            Func<Object, User> rawCreation = (obj) =>
+            async Task<User> rawCreation(object obj)
             {
                 var current = (CreateUserDTO)obj;
-                User nw = new User()
+                User nw = new()
                 {
-                    Id = _repo.Count + 1,
                     Name = current.Name,
                     Phone = current.Phone,
                     Email = current.Email,
                     UserType = (UserType_Enum)current.UserType
                 };
-                _repo.Add(nw);
-                return nw;
-            };
-            return ServiceHelper<User>.ActionHandler(rawCreation, nwUser);
+                var added = _repo.Users.AddAsync(nw);
+                _ = await _repo.SaveChangesAsync();
+                return ServiceHelper<User>.NoNullsAccepted(await _repo.Users.FirstOrDefaultAsync(u => u.Phone == nw.Phone));
+            }
+            return await ServiceHelper<User>.ActionHandler(rawCreation, nwUser); 
         }
 
-        public ServiceResponse<User> GetUser(int id)
+        public async Task<ServiceResponse<User>> GetUser(int id)
         {
-            Func<Object, User> rawGetter = (obj) =>
+            async Task<User> rawGetter(object obj)
             {
                 var idn = (int)obj;
-                var requested = _repo.Where(u => u.Id == idn).SingleOrDefault();
+                var requested =await _repo.Users.FirstOrDefaultAsync(u => u.Id == idn);
                 return ServiceHelper<User>.NoNullsAccepted(requested);
-            };
-            return ServiceHelper<User>.ActionHandler(rawGetter, id);
+            }
+            return await ServiceHelper<User>.ActionHandler(rawGetter, id);
         }
-
-        public ServiceResponse<User> UpdateUser(UserDTO nwUser)
+        
+        public async Task<ServiceResponse<List<User>>> GetAllUsers()
         {
-            Func<Object, User> rawUpdate = (obj) =>
+            return new ServiceResponse<List<User>>()
             {
-                var ci = (UserDTO)obj;
-                var oldUser = _repo.Find(u => u.Id == ci.UserId);
-                oldUser = ServiceHelper<User>.NoNullsAccepted(oldUser);
-                int index = _repo.IndexOf(oldUser);
-                User nw = new User()
-                {
-                    Id = _repo.Count + 1,
-                    Name = nwUser.Name,
-                    Phone = nwUser.Phone,
-                    Email = nwUser.Email,
-                    UserType = (UserType_Enum)nwUser.UserType
-                };
-                _repo[index] = nw;
-                return _repo[index];
+                Body = await _repo.Users.ToListAsync(),
             };
-            return ServiceHelper<User>.ActionHandler(rawUpdate, nwUser);
+        }
+        
+        public async Task<ServiceResponse<User>> UpdateUser(UpdateUserDTO nwUser)
+        {
+            async Task<User> rawUpdate(object obj)
+            {
+                var ci = (UpdateUserDTO)obj;
+                var oldUser = await _repo.Users.FirstOrDefaultAsync(u => u.Id == ci.UserId);
+                oldUser = ServiceHelper<User>.NoNullsAccepted(oldUser);
+
+                oldUser.UserType = nwUser.UserType;
+                oldUser.Email = nwUser.Email;
+                oldUser.Name = nwUser.Name;
+                oldUser.Phone = nwUser.Phone;
+
+                await _repo.SaveChangesAsync();
+                return oldUser;
+            }
+            return await ServiceHelper<User>.ActionHandler(rawUpdate, nwUser);
         }
 
 
-        ServiceResponse<User> IUserService.DeleteUser(int id)
+        public async Task<ServiceResponse<User>> DeleteUser(int id)
         {
-            Func<Object, User> rawDeletion = (obj) =>
+            async Task<User> rawDeletion(object obj)
             {
                 var idn = (int)obj;
-                var oldUser = _repo.Find(u => u.Id == idn);
+                var oldUser = await _repo.Users.FirstOrDefaultAsync(u => u.Id == idn);
                 oldUser = ServiceHelper<User>.NoNullsAccepted(oldUser);
                 _repo.Remove(oldUser);
+                await _repo.SaveChangesAsync();
                 return oldUser;
-            };
+            }
 
-            return ServiceHelper<User>.ActionHandler(rawDeletion, id);
+            return await ServiceHelper<User>.ActionHandler(rawDeletion, id);
         }
     }
 }

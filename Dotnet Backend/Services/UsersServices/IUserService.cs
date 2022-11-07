@@ -6,9 +6,9 @@ namespace exam_webapi.Services.UserServices
 {
     public interface IUserService
     {
-        ServiceResponse<User> CreateUser(CreateUserDTO nwUser);
-        ServiceResponse<User> GetUser(int id);
-        ServiceResponse<User> UpdateUser(UserDTO nwUser);
-        ServiceResponse<User> DeleteUser(int id);
+        Task<ServiceResponse<User>> CreateUser(CreateUserDTO nwUser);
+        Task<ServiceResponse<User>> GetUser(int id);
+        Task<ServiceResponse<User>> UpdateUser(UpdateUserDTO nwUser);
+        Task<ServiceResponse<User>> DeleteUser(int id);
     }
 }

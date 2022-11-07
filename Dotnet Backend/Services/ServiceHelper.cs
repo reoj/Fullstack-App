@@ -22,7 +22,7 @@ namespace DotnetBackend.Services
             {
                 response.Successfull = false;
                 string relevant =
-                    $"The request couldn't be completed because of the following error:{err.Message}";
+                    $"The request couldn't be completed because of the following error: {err.Message}";
                 response.Message = relevant;
             }
             return response;

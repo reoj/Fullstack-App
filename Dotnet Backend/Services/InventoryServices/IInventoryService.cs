@@ -5,6 +5,9 @@ using users_items_backend.DTOs.ItemDTOs;
 
 namespace exam_webapi.Services.Inventory
 {
+    /// <summary>
+    /// Contract for Items Service
+    /// </summary>
     public interface IInventoryService
     {
         Task<ServiceResponse<GetItemDTO>> GetItem(Guid id);

@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace exam_webapi.DTOs.ItemDTOs
 {
+    /// <summary>
+    /// Data Transfer Object for Item Update
+    /// </summary>
     public class UpdateItemDTO
     {
         public Guid ItemId { get; set; }

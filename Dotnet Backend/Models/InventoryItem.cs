@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace exam_webapi.Models
 {
+    /// <summary>
+    /// Represents an Item that can be held by a User
+    /// </summary>
     public class InventoryItem
     {
         public Guid Id { get; set; } = new Guid();

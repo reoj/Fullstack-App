@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace exam_webapi.DTOs.ItemDTOs
 {
+    /// <summary>
+    /// Data Transfer Object for Item creation
+    /// </summary>
     public class CreateIttemDTO
     {
         public string Name { get; set; } = "Out of Stock";

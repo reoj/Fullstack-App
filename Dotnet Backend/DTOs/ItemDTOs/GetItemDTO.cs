@@ -2,6 +2,9 @@
 
 namespace users_items_backend.DTOs.ItemDTOs
 {
+    /// <summary>
+    /// Represents the Item atributes relevant to the FrontEnd
+    /// </summary>
     public class GetItemDTO
     {
         public Guid Id { get; set; }
@@ -10,6 +13,7 @@ namespace users_items_backend.DTOs.ItemDTOs
         public int Quantity { get; set; }
         public int UserId { get; set; }
 
+        #region Constructor
         public GetItemDTO(InventoryItem it)
         {
             Id = it.Id;
@@ -17,6 +21,7 @@ namespace users_items_backend.DTOs.ItemDTOs
             Description = it.Description;
             Quantity = it.Quantity;
             UserId = it.UserId;
-        }
+        } 
+        #endregion
     }
 }

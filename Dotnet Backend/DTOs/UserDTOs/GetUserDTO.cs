@@ -7,6 +7,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DotnetBackend.DTOs.UserDTOs
 {
+    /// <summary>
+    /// Represents the User atributes relevant to the FrontEnd
+    /// </summary>
     public class GetUserDTO
     {
         public string Name { get; set; } = string.Empty;
@@ -15,6 +18,11 @@ namespace DotnetBackend.DTOs.UserDTOs
         public string Phone { get; set; } = string.Empty;
         public List<Guid> Items { get; set; }
 
+        #region Constructor
+        /// <summary>
+        /// Takes a User object and prepares it for data transference
+        /// </summary>
+        /// <param name="u">Defined User object to be parsed</param>
         public GetUserDTO(User u)
         {
             Name = u.Name;
@@ -27,6 +35,7 @@ namespace DotnetBackend.DTOs.UserDTOs
                 u.items.ForEach(i => guids.Add(i.Id));
             }
             Items = guids;
-        }
+        } 
+        #endregion
     }
 }

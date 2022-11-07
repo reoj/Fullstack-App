@@ -5,6 +5,9 @@ using exam_webapi.Models;
 
 namespace exam_webapi.Services.UserServices
 {
+    /// <summary>
+    /// Contract for User Service
+    /// </summary>
     public interface IUserService
     {
         Task<ServiceResponse<User>> CreateUser(CreateUserDTO nwUser);

@@ -12,10 +12,14 @@ namespace exam_webapi.Services.Inventory
     {
         public DataContext _repo { get; set; }
 
+        #region Constructor
         public ItemService(DataContext context)
         {
             _repo = context;
         }
+        #endregion
+
+        #region Public Async Methods
         public async Task<ServiceResponse<GetItemDTO>> CreateItem(CreateIttemDTO currenItem)
         {
 
@@ -77,6 +81,7 @@ namespace exam_webapi.Services.Inventory
             return await ServiceHelper<List<GetItemDTO>>.ActionHandler(rawGet, 0);
 
         }
+
         public async Task<ServiceResponse<GetItemDTO>> UpdateItem(UpdateItemDTO currenItem)
         {
             async Task<GetItemDTO> rawUpdate(object obj)
@@ -96,5 +101,6 @@ namespace exam_webapi.Services.Inventory
             return await ServiceHelper<GetItemDTO>.ActionHandler(rawUpdate, currenItem);
         }
 
+        #endregion
     }
 }

@@ -6,6 +6,9 @@ using exam_webapi.Models;
 
 namespace exam_webapi.DTOs.UserDTOs
 {
+    /// <summary>
+    /// Data Transfer Object for User update
+    /// </summary>
     public class UpdateUserDTO
     {
         public int UserId { get; set; }

@@ -20,6 +20,7 @@ namespace exam_webapi.Services.UserServices
         }
         #endregion
 
+        #region Public Async Methods
         public async Task<ServiceResponse<User>> CreateUser(CreateUserDTO nwUser)
         {
             async Task<User> rawCreation(object obj)
@@ -87,7 +88,6 @@ namespace exam_webapi.Services.UserServices
             return await ServiceHelper<GetUserDTO>.ActionHandler(rawUpdate, nwUser);
         }
 
-
         public async Task<ServiceResponse<GetUserDTO>> DeleteUser(int id)
         {
             async Task<GetUserDTO> rawDeletion(object obj)
@@ -104,5 +104,7 @@ namespace exam_webapi.Services.UserServices
 
             return await ServiceHelper<GetUserDTO>.ActionHandler(rawDeletion, id);
         }
+
+        #endregion
     }
 }

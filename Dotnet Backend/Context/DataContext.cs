@@ -3,14 +3,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace users_items_backend.Context
 {
-    public class DataContext:DbContext
+    /// <summary>
+    /// Implements the DataBase context for all Models
+    /// </summary>
+    public class DataContext : DbContext
     {
-        public DataContext(DbContextOptions<DataContext> options):base(options)
-        {
 
-        }
+        #region Default Constructor
+        public DataContext(DbContextOptions<DataContext> options) : base(options)
+        { }
+        #endregion
+
+        #region Database Sets
         public DbSet<InventoryItem> Items => Set<InventoryItem>();
-        public DbSet<User> Users =>Set<User>();
+        public DbSet<User> Users => Set<User>();
 
+        #endregion
     }
 }

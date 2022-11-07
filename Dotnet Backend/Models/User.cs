@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace exam_webapi.Models
 {
+    /// <summary>
+    /// Represents a person using the app
+    /// </summary>
     public class User
     {
         public int Id { get; set; }

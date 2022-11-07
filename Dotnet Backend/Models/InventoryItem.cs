@@ -7,7 +7,7 @@ namespace exam_webapi.Models
 {
     public class InventoryItem
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = new Guid();
         public string Name { get; set; } = "Out of Stock";
         public string Description { get; set; } = "";
         public int Quantity { get; set; }

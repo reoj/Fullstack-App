@@ -1,15 +1,16 @@
 
 using DotnetBackend.Models;
 using exam_webapi.DTOs.ItemDTOs;
-using exam_webapi.Models;
+using users_items_backend.DTOs.ItemDTOs;
 
 namespace exam_webapi.Services.Inventory
 {
     public interface IInventoryService
     {
-        Task<ServiceResponse<InventoryItem>> GetItem(Guid id);
-        Task<ServiceResponse<InventoryItem>> CreateItem(CreateIttemDTO currenItem);
-        Task<ServiceResponse<InventoryItem>> UpdateItem(UpdateItemDTO currenItem);
-        Task<ServiceResponse<InventoryItem>> DeleteItem(Guid id);
+        Task<ServiceResponse<GetItemDTO>> GetItem(Guid id);
+        Task<ServiceResponse<List<GetItemDTO>>> GetAllItems();
+        Task<ServiceResponse<GetItemDTO>> CreateItem(CreateIttemDTO currenItem);
+        Task<ServiceResponse<GetItemDTO>> UpdateItem(UpdateItemDTO currenItem);
+        Task<ServiceResponse<GetItemDTO>> DeleteItem(Guid id);
     }
 }

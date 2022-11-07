@@ -8,7 +8,7 @@ using users_items_backend.Context;
 
 namespace exam_webapi.Services.UserServices
 {
-    public class UserService :IUserService
+    public class UserService : IUserService
     {
         public DataContext _repo { get; set; }
 
@@ -16,7 +16,7 @@ namespace exam_webapi.Services.UserServices
         public UserService(DataContext context)
         {
             _repo = context;
-        } 
+        }
         #endregion
 
         public async Task<ServiceResponse<User>> CreateUser(CreateUserDTO nwUser)
@@ -35,7 +35,7 @@ namespace exam_webapi.Services.UserServices
                 _ = await _repo.SaveChangesAsync();
                 return ServiceHelper<User>.NoNullsAccepted(await _repo.Users.FirstOrDefaultAsync(u => u.Phone == nw.Phone));
             }
-            return await ServiceHelper<User>.ActionHandler(rawCreation, nwUser); 
+            return await ServiceHelper<User>.ActionHandler(rawCreation, nwUser);
         }
 
         public async Task<ServiceResponse<User>> GetUser(int id)
@@ -43,12 +43,12 @@ namespace exam_webapi.Services.UserServices
             async Task<User> rawGetter(object obj)
             {
                 var idn = (int)obj;
-                var requested =await _repo.Users.FirstOrDefaultAsync(u => u.Id == idn);
+                var requested = await _repo.Users.FirstOrDefaultAsync(u => u.Id == idn);
                 return ServiceHelper<User>.NoNullsAccepted(requested);
             }
             return await ServiceHelper<User>.ActionHandler(rawGetter, id);
         }
-        
+
         public async Task<ServiceResponse<List<User>>> GetAllUsers()
         {
             return new ServiceResponse<List<User>>()
@@ -56,7 +56,7 @@ namespace exam_webapi.Services.UserServices
                 Body = await _repo.Users.ToListAsync(),
             };
         }
-        
+
         public async Task<ServiceResponse<User>> UpdateUser(UpdateUserDTO nwUser)
         {
             async Task<User> rawUpdate(object obj)

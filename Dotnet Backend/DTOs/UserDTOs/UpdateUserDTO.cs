@@ -6,7 +6,7 @@ using exam_webapi.Models;
 
 namespace exam_webapi.DTOs.UserDTOs
 {
-    public class UserDTO
+    public class UpdateUserDTO
     {
         public int UserId { get; set; }
         public string Name { get; set; } = string.Empty;

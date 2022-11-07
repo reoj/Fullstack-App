@@ -1,13 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using DotnetBackend.Models;
 using exam_webapi.DTOs.UserDTOs;
 using exam_webapi.Models;
 using exam_webapi.Services.UserServices;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace exam_webapi.Controllers
 {
@@ -32,8 +27,14 @@ namespace exam_webapi.Controllers
             var result = await (_users.GetUser(id));
             return result.Successfull ? Ok(result) : NotFound(result);
         }
-        
-        [HttpPut("{id}")]
+        [HttpGet("GetAll")]
+        public async Task<ActionResult<ServiceResponse<User>>> GetAllUsers(int id)
+        {
+            var result = await _users.GetAllUsers();
+            return result.Successfull ? Ok(result) : NotFound(result);
+        }
+
+        [HttpPut]
         public async Task<ActionResult<ServiceResponse<User>>> UpdateUser(UpdateUserDTO nwUser){
             var result = await (_users.UpdateUser(nwUser));
             return result.Successfull ? Ok(result) : NotFound(result);

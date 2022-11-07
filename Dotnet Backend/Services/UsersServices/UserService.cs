@@ -1,8 +1,9 @@
+using DotnetBackend.DTOs.UserDTOs;
 using DotnetBackend.Models;
 using DotnetBackend.Services;
 using exam_webapi.DTOs.UserDTOs;
 using exam_webapi.Models;
-using exam_webapi.Repositories;
+// using exam_webapi.Repositories;
 using Microsoft.EntityFrameworkCore;
 using users_items_backend.Context;
 
@@ -38,31 +39,41 @@ namespace exam_webapi.Services.UserServices
             return await ServiceHelper<User>.ActionHandler(rawCreation, nwUser);
         }
 
-        public async Task<ServiceResponse<User>> GetUser(int id)
+        public async Task<ServiceResponse<GetUserDTO>> GetUser(int id)
         {
-            async Task<User> rawGetter(object obj)
+            async Task<GetUserDTO> rawGetter(object obj)
             {
                 var idn = (int)obj;
-                var requested = await _repo.Users.FirstOrDefaultAsync(u => u.Id == idn);
-                return ServiceHelper<User>.NoNullsAccepted(requested);
+                var requested = await _repo.Users
+                    .Include(u => u.items)
+                    .FirstOrDefaultAsync(u => u.Id == idn);
+                requested = ServiceHelper<User>.NoNullsAccepted(requested);
+                return new GetUserDTO(requested);
             }
-            return await ServiceHelper<User>.ActionHandler(rawGetter, id);
+            return await ServiceHelper<GetUserDTO>.ActionHandler(rawGetter, id);
         }
 
-        public async Task<ServiceResponse<List<User>>> GetAllUsers()
+        public async Task<ServiceResponse<List<GetUserDTO>>> GetAllUsers()
         {
-            return new ServiceResponse<List<User>>()
+            var rawList = await _repo.Users
+                   .Include(u => u.items)
+                   .ToListAsync();
+            var dtoList = new List<GetUserDTO>();
+            rawList.ForEach(u => dtoList.Add(new GetUserDTO(u)));
+            return new ServiceResponse<List<GetUserDTO>>()
             {
-                Body = await _repo.Users.ToListAsync(),
+                Body = dtoList
             };
         }
 
-        public async Task<ServiceResponse<User>> UpdateUser(UpdateUserDTO nwUser)
+        public async Task<ServiceResponse<GetUserDTO>> UpdateUser(UpdateUserDTO nwUser)
         {
-            async Task<User> rawUpdate(object obj)
+            async Task<GetUserDTO> rawUpdate(object obj)
             {
                 var ci = (UpdateUserDTO)obj;
-                var oldUser = await _repo.Users.FirstOrDefaultAsync(u => u.Id == ci.UserId);
+                var oldUser = await _repo.Users
+                    .Include(u => u.items)
+                    .FirstOrDefaultAsync(u => u.Id == ci.UserId);
                 oldUser = ServiceHelper<User>.NoNullsAccepted(oldUser);
 
                 oldUser.UserType = nwUser.UserType;
@@ -71,25 +82,27 @@ namespace exam_webapi.Services.UserServices
                 oldUser.Phone = nwUser.Phone;
 
                 await _repo.SaveChangesAsync();
-                return oldUser;
+                return new GetUserDTO(oldUser);
             }
-            return await ServiceHelper<User>.ActionHandler(rawUpdate, nwUser);
+            return await ServiceHelper<GetUserDTO>.ActionHandler(rawUpdate, nwUser);
         }
 
 
-        public async Task<ServiceResponse<User>> DeleteUser(int id)
+        public async Task<ServiceResponse<GetUserDTO>> DeleteUser(int id)
         {
-            async Task<User> rawDeletion(object obj)
+            async Task<GetUserDTO> rawDeletion(object obj)
             {
                 var idn = (int)obj;
-                var oldUser = await _repo.Users.FirstOrDefaultAsync(u => u.Id == idn);
+                var oldUser = await _repo.Users
+                    .Include(u => u.items)
+                    .FirstOrDefaultAsync(u => u.Id == idn);
                 oldUser = ServiceHelper<User>.NoNullsAccepted(oldUser);
                 _repo.Remove(oldUser);
                 await _repo.SaveChangesAsync();
-                return oldUser;
+                return new GetUserDTO(oldUser);
             }
 
-            return await ServiceHelper<User>.ActionHandler(rawDeletion, id);
+            return await ServiceHelper<GetUserDTO>.ActionHandler(rawDeletion, id);
         }
     }
 }

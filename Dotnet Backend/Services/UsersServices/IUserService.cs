@@ -1,3 +1,4 @@
+using DotnetBackend.DTOs.UserDTOs;
 using DotnetBackend.Models;
 using exam_webapi.DTOs.UserDTOs;
 using exam_webapi.Models;
@@ -7,8 +8,9 @@ namespace exam_webapi.Services.UserServices
     public interface IUserService
     {
         Task<ServiceResponse<User>> CreateUser(CreateUserDTO nwUser);
-        Task<ServiceResponse<User>> GetUser(int id);
-        Task<ServiceResponse<User>> UpdateUser(UpdateUserDTO nwUser);
-        Task<ServiceResponse<User>> DeleteUser(int id);
+        Task<ServiceResponse<GetUserDTO>> GetUser(int id);
+        Task<ServiceResponse<List<GetUserDTO>>> GetAllUsers();
+        Task<ServiceResponse<GetUserDTO>> UpdateUser(UpdateUserDTO nwUser);
+        Task<ServiceResponse<GetUserDTO>> DeleteUser(int id);
     }
 }

@@ -17,7 +17,7 @@ namespace users_items_backend.Context
         #region Database Sets
         public DbSet<InventoryItem> Items => Set<InventoryItem>();
         public DbSet<User> Users => Set<User>();
-        public DbSet<Exchange> Exchanges=>Set<Exchange>();
+        public DbSet<Exchange> Exchanges => Set<Exchange>();
 
         #endregion
     }

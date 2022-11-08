@@ -4,6 +4,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using DotnetBackend.Services.UserServices;
 using DotnetBackend.Services.Inventory;
+using DotnetBackend.Services.ExchangeServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +43,8 @@ builder.Services.AddSwaggerGen( // Enabling the authentication for Swagger UI
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IInventoryService,ItemService>();
+builder.Services.AddScoped<IExchangeService,ExchangeService>();
+
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
@@ -55,6 +58,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+//app.UseCors(builder => builder
+//     .AllowAnyOrigin()
+//     .AllowAnyMethod()
+//     .AllowAnyHeader()
+//     .AllowCredentials());
 
 app.UseAuthorization();
 

@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace exam_webapi.DTOs.ItemDTOs
+namespace DotnetBackend.DTOs
 {
     /// <summary>
     /// Data Transfer Object for Item Update

@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace exam_webapi.Models
+namespace DotnetBackend.Models
 {
     /// <summary>
     /// Represents the recognized types of User

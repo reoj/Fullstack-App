@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using exam_webapi.Models;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using DotnetBackend.Models;
 
-namespace DotnetBackend.DTOs.UserDTOs
+namespace DotnetBackend.DTOs
 {
     /// <summary>
     /// Represents the User atributes relevant to the FrontEnd

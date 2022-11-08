@@ -1,6 +1,6 @@
-﻿using exam_webapi.Models;
+﻿using DotnetBackend.Models;
 
-namespace users_items_backend.DTOs.ItemDTOs
+namespace DotnetBackend.DTOs
 {
     /// <summary>
     /// Represents the Item atributes relevant to the FrontEnd

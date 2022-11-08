@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace exam_webapi.Models
+namespace DotnetBackend.Models
 {
     /// <summary>
     /// Represents a person using the app

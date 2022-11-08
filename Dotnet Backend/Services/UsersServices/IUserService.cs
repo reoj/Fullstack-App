@@ -1,9 +1,7 @@
-using DotnetBackend.DTOs.UserDTOs;
+using DotnetBackend.DTOs;
 using DotnetBackend.Models;
-using exam_webapi.DTOs.UserDTOs;
-using exam_webapi.Models;
 
-namespace exam_webapi.Services.UserServices
+namespace DotnetBackend.Services.UserServices
 {
     /// <summary>
     /// Contract for User Service

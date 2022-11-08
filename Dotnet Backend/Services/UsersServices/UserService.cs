@@ -1,13 +1,10 @@
-using DotnetBackend.DTOs.UserDTOs;
+using DotnetBackend.DTOs;
 using DotnetBackend.Models;
-using DotnetBackend.Services;
-using exam_webapi.DTOs.UserDTOs;
-using exam_webapi.Models;
 // using exam_webapi.Repositories;
 using Microsoft.EntityFrameworkCore;
 using users_items_backend.Context;
 
-namespace exam_webapi.Services.UserServices
+namespace DotnetBackend.Services.UserServices
 {
     public class UserService : IUserService
     {

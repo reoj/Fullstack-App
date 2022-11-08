@@ -1,9 +1,7 @@
-
 using DotnetBackend.Models;
-using exam_webapi.DTOs.ItemDTOs;
-using users_items_backend.DTOs.ItemDTOs;
+using DotnetBackend.DTOs;
 
-namespace exam_webapi.Services.Inventory
+namespace DotnetBackend.Services.Inventory
 {
     /// <summary>
     /// Contract for Items Service

@@ -1,6 +1,6 @@
-﻿using exam_webapi.Models;
+﻿using DotnetBackend.Models;
 
-namespace exam_webapi.Repositories
+namespace DotnetBackend.Repositories
 {
     /// <summary>
     /// Represents Lists that emulate a Database

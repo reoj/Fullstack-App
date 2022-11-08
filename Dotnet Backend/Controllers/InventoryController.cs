@@ -1,10 +1,9 @@
+using DotnetBackend.DTOs;
 using DotnetBackend.Models;
-using exam_webapi.DTOs.ItemDTOs;
-using exam_webapi.Services.Inventory;
+using DotnetBackend.Services.Inventory;
 using Microsoft.AspNetCore.Mvc;
-using users_items_backend.DTOs.ItemDTOs;
 
-namespace exam_webapi.Controllers
+namespace DotnetBackend.Controllers
 {
     /// <summary>
     /// Controller for Items

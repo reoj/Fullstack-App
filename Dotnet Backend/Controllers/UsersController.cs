@@ -1,10 +1,9 @@
+using DotnetBackend.DTOs;
 using DotnetBackend.Models;
-using exam_webapi.DTOs.UserDTOs;
-using exam_webapi.Models;
-using exam_webapi.Services.UserServices;
+using DotnetBackend.Services.UserServices;
 using Microsoft.AspNetCore.Mvc;
 
-namespace exam_webapi.Controllers
+namespace DotnetBackend.Controllers
 {
     /// <summary>
     /// Controller for Users

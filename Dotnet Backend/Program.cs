@@ -1,9 +1,9 @@
 //using exam_webapi.Repositories;
-using exam_webapi.Services.Inventory;
-using exam_webapi.Services.UserServices;
 using users_items_backend.Context;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using DotnetBackend.Services.UserServices;
+using DotnetBackend.Services.Inventory;
 
 var builder = WebApplication.CreateBuilder(args);
 

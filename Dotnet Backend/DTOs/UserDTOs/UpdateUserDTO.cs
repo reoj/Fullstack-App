@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using exam_webapi.Models;
+using DotnetBackend.Models;
 
-namespace exam_webapi.DTOs.UserDTOs
+namespace DotnetBackend.DTOs
 {
     /// <summary>
     /// Data Transfer Object for User update

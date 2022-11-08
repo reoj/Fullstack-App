@@ -1,12 +1,9 @@
 using DotnetBackend.Models;
-using DotnetBackend.Services;
-using exam_webapi.DTOs.ItemDTOs;
-using exam_webapi.Models;
 using Microsoft.EntityFrameworkCore;
 using users_items_backend.Context;
-using users_items_backend.DTOs.ItemDTOs;
+using DotnetBackend.DTOs;
 
-namespace exam_webapi.Services.Inventory
+namespace DotnetBackend.Services.Inventory
 {
     public class ItemService : IInventoryService
     {

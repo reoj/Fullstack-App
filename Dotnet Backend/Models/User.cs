@@ -15,6 +15,6 @@ namespace DotnetBackend.Models
         public UserType_Enum UserType { get; set; }
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
-        public List<InventoryItem>? items { get; set; }
+        public List<InventoryItem>? Items { get; set; }
     }
 }

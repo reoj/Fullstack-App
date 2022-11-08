@@ -25,9 +25,9 @@ namespace DotnetBackend.DTOs
             Email = u.Email;
             Phone = u.Phone;
             List<Guid> guids = new();
-            if (u.items is not null)
+            if (u.Items is not null)
             {
-                u.items.ForEach(i => guids.Add(i.Id));
+                u.Items.ForEach(i => guids.Add(i.Id));
             }
             Items = guids;
         } 

@@ -43,7 +43,7 @@ namespace DotnetBackend.Services.UserServices
             {
                 var idn = (int)obj;
                 var requested = await _repo.Users
-                    .Include(u => u.items)
+                    .Include(u => u.Items)
                     .FirstOrDefaultAsync(u => u.Id == idn);
                 requested = ServiceHelper<User>.NoNullsAccepted(requested);
                 return new GetUserDTO(requested);
@@ -54,7 +54,7 @@ namespace DotnetBackend.Services.UserServices
         public async Task<ServiceResponse<List<GetUserDTO>>> GetAllUsers()
         {
             var rawList = await _repo.Users
-                   .Include(u => u.items)
+                   .Include(u => u.Items)
                    .ToListAsync();
             var dtoList = new List<GetUserDTO>();
             rawList.ForEach(u => dtoList.Add(new GetUserDTO(u)));
@@ -70,7 +70,7 @@ namespace DotnetBackend.Services.UserServices
             {
                 var ci = (UpdateUserDTO)obj;
                 var oldUser = await _repo.Users
-                    .Include(u => u.items)
+                    .Include(u => u.Items)
                     .FirstOrDefaultAsync(u => u.Id == ci.UserId);
                 oldUser = ServiceHelper<User>.NoNullsAccepted(oldUser);
 
@@ -91,7 +91,7 @@ namespace DotnetBackend.Services.UserServices
             {
                 var idn = (int)obj;
                 var oldUser = await _repo.Users
-                    .Include(u => u.items)
+                    .Include(u => u.Items)
                     .FirstOrDefaultAsync(u => u.Id == idn);
                 oldUser = ServiceHelper<User>.NoNullsAccepted(oldUser);
                 _repo.Remove(oldUser);

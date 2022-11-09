@@ -103,5 +103,15 @@ namespace DotnetBackend.Services.UserServices
         }
 
         #endregion
+
+        #region Raw Methods
+        public async Task<User> GetUserRaw(int idn)
+        {
+            var requested = await _repo.Users
+                .Include(u => u.Items)
+                .FirstOrDefaultAsync(u => u.Id == idn);
+            return ServiceHelper<User>.NoNullsAccepted(requested);
+        }
+        #endregion
     }
 }

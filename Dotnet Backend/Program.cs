@@ -9,9 +9,9 @@ using DotnetBackend.Services.ExchangeServices;
 var builder = WebApplication.CreateBuilder(args);
 
 // Introduces SQLite data context
-builder.Services.AddDbContext<DataContext>(op =>
+builder.Services.AddDbContext<DataContext>(options =>
 {
-    op.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 // Add services to the container.
@@ -42,8 +42,8 @@ builder.Services.AddSwaggerGen( // Enabling the authentication for Swagger UI
 // Add services to the container.
 
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IInventoryService,ItemService>();
-builder.Services.AddScoped<IExchangeService,ExchangeService>();
+builder.Services.AddScoped<IInventoryService, ItemService>();
+builder.Services.AddScoped<IExchangeService, ExchangeService>();
 
 builder.Services.AddEndpointsApiExplorer();
 

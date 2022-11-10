@@ -7,6 +7,7 @@ namespace DotnetBackend.DTOs
     /// </summary>
     public class GetUserDTO
     {
+        public int IdUser { get; set; }
         public string Name { get; set; } = string.Empty;
         public UserType_Enum UserType { get; set; }
         public string Email { get; set; } = string.Empty;
@@ -20,6 +21,7 @@ namespace DotnetBackend.DTOs
         /// <param name="u">Defined User object to be parsed</param>
         public GetUserDTO(User u)
         {
+            IdUser = u.Id;
             Name = u.Name;
             UserType = u.UserType;
             Email = u.Email;

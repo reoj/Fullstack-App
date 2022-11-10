@@ -1,12 +1,21 @@
-import React, { Fragment} from "react";
+import React, { useEffect, Fragment} from "react";
 import { useSelector } from "react-redux";
 import TableDisplayer from "../../UI/TableDisplayer";
 import ItemSingle from "./ItemSingle";
+import { fetchInitialState } from "../../../Context/items-redux-actions";
+import { useDispatch } from "react-redux";
 
 function ItemsList(props) {
   const itemsList = useSelector((state) => state.root.item.value.list);
 
-  const properties = ["ID", "Description", "State","Owner ID"];
+  const dsp = useDispatch()
+
+  useEffect(() => {
+    dsp(fetchInitialState());
+  }, [])
+  
+
+  const properties = ["ID", "Name", "Description", "Quantity","Owner ID"];
 
   return (
     <Fragment>
@@ -19,9 +28,10 @@ function ItemsList(props) {
           <ItemSingle
             key={"Item" + i.id.toString()}
             idn={i.id}
-            description={i.desc}
-            owner={i.owner}
-            state={i.state}
+            name = {i.name}
+            description={i.description}
+            owner={i.userId}
+            quantity={i.quantity}
           />
         );
       })}

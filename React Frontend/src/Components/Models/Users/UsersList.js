@@ -1,13 +1,19 @@
-import React, { Fragment } from "react";
-import { useSelector } from "react-redux";
+import React, { Fragment, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import TableDisplayer from "../../UI/TableDisplayer";
 import UserSingle from "./UserSingle";
+import { fetchInitialState } from "../../../Context/users-redux-actions";
 
 
 function UsersList(props) {
   const usersList = useSelector((state) => state.root.user.value.list);
+  const dsp = useDispatch()
 
-  const properties = ["ID", "Name", "Class", "Items"];
+  useEffect(() => {
+    dsp(fetchInitialState());
+  }, [])
+
+  const properties = ["ID", "Name", "Class","E-mail","Phone", "Items"];
 
   return (
     <Fragment>
@@ -15,10 +21,12 @@ function UsersList(props) {
         {usersList.map((u) => {
           return (
             <UserSingle
-              key={"User__" + u.id.toString()}
-              idn={u.id}
+              key={"User__" + u.idUser.toString()}
+              idn={u.idUser}
               name={u.name}
-              cl = {u.utype}
+              cl = {u.userType}
+              email = {u.email}
+              phone = {u.phone}
             />
           );
         })}

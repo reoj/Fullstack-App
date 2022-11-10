@@ -28,7 +28,7 @@ builder.Services.AddSwaggerGen( // Enabling the authentication for Swagger UI
             Description = "Evidence Fullstack project for the .Net Accademy",
             Contact = new OpenApiContact
             {
-                Name = "Jaciel Israel Res�ndiz Ochoa",
+                Name = "Jaciel Israel Reséndiz Ochoa",
                 Email = "jresendizochoa@deloitte.com",
                 Url = new Uri("https://github.com/reoj")
             },

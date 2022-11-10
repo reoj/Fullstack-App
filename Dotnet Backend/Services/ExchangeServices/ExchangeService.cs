@@ -9,8 +9,8 @@ namespace DotnetBackend.Services.ExchangeServices
 {
     public class ExchangeService : IExchangeService
     {
-        private DataContext _repo;
-        private IInventoryService _iserv;
+        private readonly DataContext _repo;
+        private readonly IInventoryService _iserv;
         private readonly IUserService _userv;
 
         public ExchangeService(DataContext context, IInventoryService iserv, IUserService userv)
@@ -79,9 +79,9 @@ namespace DotnetBackend.Services.ExchangeServices
         #region Auxiliary
         private async Task<(User sender, User reciever)> VerifyUsersById(int idSender, int idReciever)
         {
-            var currentSender = await awaitUserRequest(idSender);
-            var currentReciever = await awaitUserRequest(idReciever);
-            return (sender: currentReciever, reciever: currentReciever);
+            return (
+                sender: await AwaitUserRequest(idSender), reciever: await AwaitUserRequest(idReciever)
+            );
         }
 
         public async Task<GetExchangeDTO> InventoryExchangeHandler
@@ -89,7 +89,7 @@ namespace DotnetBackend.Services.ExchangeServices
         {
             // Check if the Users Exist
             // Get the Sender and Reciever Users from Data context
-            (var cSender, var cReciever) = await VerifyUsersById(ce.Sender, ce.Reciever);
+            (var cSender, var cReciever) = reverse == false ? await VerifyUsersById(ce.Sender, ce.Reciever) : await VerifyUsersById(ce.Reciever, ce.Sender);
 
             //Request the sender's Inventory
             var sendersInv = await _iserv.GetItemsOfUser(ce.Sender);
@@ -114,6 +114,7 @@ namespace DotnetBackend.Services.ExchangeServices
                 var responseFromAdding = await _iserv.CreateItem(
                     new CreateIttemDTO()
                     {
+                        UserId = cReciever.Id,
                         Name = ce.ItemName,
                         Description = ce.ItemDescription,
                         Quantity = ce.ItemQuantity
@@ -122,6 +123,7 @@ namespace DotnetBackend.Services.ExchangeServices
 
                 //2. Remove Items from sender's inventory
                 exchangeItem.Quantity -= ce.ItemQuantity;
+                exchangeItem.UserId = cSender.Id;
                 var responseFromUpdating = await _iserv.UpdateItem(
                     new UpdateItemDTO(exchangeItem));
 
@@ -137,8 +139,8 @@ namespace DotnetBackend.Services.ExchangeServices
                 else
                 {
                     string msj = "The Requests couldn't be compleated:";
-                    msj = msj + $"On Adding:{responseFromAdding.Message}";
-                    msj = msj + $"\nOn Updating{responseFromUpdating.Message}";
+                    msj += $"On Adding:{responseFromAdding.Message}";
+                    msj += $"\nOn Updating{responseFromUpdating.Message}";
                     throw new ExchangeException(msj);
                 }
             }
@@ -150,7 +152,7 @@ namespace DotnetBackend.Services.ExchangeServices
 
         }
 
-        private async Task<User> awaitUserRequest(int userId)
+        private async Task<User> AwaitUserRequest(int userId)
         {
             return ServiceHelper<User>.NoNullsAccepted(await _userv.GetUserRaw(userId));
         }

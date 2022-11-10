@@ -29,6 +29,8 @@ function UserSingle(props) {
       <td>{props.idn}</td>
       <td>{props.name}</td>
       <td>{props.cl}</td>
+      <td>{props.email}</td>
+      <td>{props.phone}</td>
       <td>
         <Link to={"/Filtered-items/"+ props.idn}>
           <Button variant="primary" key={"itemsOf_" + props.itemID}>

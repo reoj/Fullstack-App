@@ -16,13 +16,13 @@ namespace DotnetBackend.Services
         /// <param name="arg">The expected argument of that function</param>
         /// <returns>An async Service response that reflects the state of the request</returns>
         public static async Task<ServiceResponse<T>> ActionHandler(
-            Func<object, Task<T>> fn, object arg)
+            Func<object, Task<T>> fn, params object[] args)
         {
             var response = new ServiceResponse<T>();
             try
             {
                 //Atempt to create a successfull response with the data given
-                response.Body = await fn(arg);
+                response.Body = await fn(args);
                 response.Successfull = true;
             }
             catch (Exception err)

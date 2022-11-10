@@ -3,13 +3,14 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch } from "react-redux";
-import { addItemR } from "../../../Context/items-redux-slice";
+import { sendNewItem } from "../../../Context/items-redux-actions";
 import ModalContext from "../../../Context/modal-context";
 
 function AddItem(props) {
   const descfieldRef = useRef();
   const ownerfieldRef = useRef();
-  const stfieldRef = useRef()
+  const inamecfieldRef = useRef();
+  const qtfieldRef = useRef()
 
   const dsp = useDispatch();
 
@@ -23,7 +24,7 @@ function AddItem(props) {
     });
   }
   function onSaveHandle(oldData) {
-    const emptyFields = checkNoNulls([descfieldRef, ownerfieldRef]);
+    const emptyFields = checkNoNulls([descfieldRef, ownerfieldRef, inamecfieldRef, qtfieldRef]);
     if (emptyFields.length !== 0) {
       emptyFields.forEach((f) => {
         f.current.className = "form-control bg-danger";
@@ -31,9 +32,10 @@ function AddItem(props) {
       return;
     }
     dsp(
-      addItemR({
+      sendNewItem({
+        name: inamecfieldRef.current.value,
         desc: descfieldRef.current.value,
-        state: stfieldRef.current.value,
+        quantity: qtfieldRef.current.value,
         owner: ownerfieldRef.current.value,
       })
     );
@@ -55,6 +57,15 @@ function AddItem(props) {
   return (
     <Form>
       <Modal.Body>
+      <Form.Group className="mb-3" controlId="form_Name">
+          <Form.Label>Description</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Item Name"
+            ref={inamecfieldRef}
+            onFocus={onInputClarity}
+          />
+        </Form.Group>
         <Form.Group className="mb-3" controlId="form_Desc">
           <Form.Label>Description</Form.Label>
           <Form.Control
@@ -65,11 +76,11 @@ function AddItem(props) {
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="form_Owner">
-          <Form.Label>State</Form.Label>
+          <Form.Label>Quantity</Form.Label>
           <Form.Control
             type="text"
-            placeholder="Item State"
-            ref={stfieldRef}
+            placeholder="Item Quantity"
+            ref={qtfieldRef}
             onFocus={onInputClarity}
             defaultValue={""}
           />

@@ -15,7 +15,7 @@ function TableDisplayer(props) {
     title: "",
     message: {},
   });
-
+  
   function AddHandler() {
     if (props.modelType === "Users") {
       setModalProperties({
@@ -47,16 +47,18 @@ function TableDisplayer(props) {
         <OffcanvasHeader className="fs-3 mb-3 col-1 w-50">
           {props.modelType}
         </OffcanvasHeader>
-        {props.modelType !== "Filtered Items" && <Button className="col-2" onClick={AddHandler}>
-          + Add {props.modelType}
-        </Button>}
+        {props.modelType !== "Filtered Items" && (
+          <Button className="col-2" onClick={AddHandler}>
+            + Add {props.modelType}
+          </Button>
+        )}
 
         <Table
           className="table table-striped
-      table-hover	
-      table-borderless
-      table-primary
-      align-middle"
+            table-hover	
+            table-borderless
+            table-primary
+            align-middle"
         >
           <thead key={props.modelType + "_thead"} className="table-light">
             <tr key={props.modelType + "_first_tr"}>

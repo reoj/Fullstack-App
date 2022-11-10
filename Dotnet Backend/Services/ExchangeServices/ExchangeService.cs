@@ -1,5 +1,6 @@
 using DotnetBackend.DTOs;
 using DotnetBackend.Models;
+using DotnetBackend.Services.Inventory;
 using DotnetBackend.Services.UserServices;
 using Microsoft.EntityFrameworkCore;
 using users_items_backend.Context;
@@ -9,46 +10,32 @@ namespace DotnetBackend.Services.ExchangeServices
     public class ExchangeService : IExchangeService
     {
         private DataContext _repo;
-        private IUserService userv;
+        private IInventoryService _iserv;
+        private readonly IUserService _userv;
 
-        public ExchangeService(DataContext context, IUserService userserv)
+        public ExchangeService(DataContext context, IInventoryService iserv, IUserService userv)
         {
+            this._userv = userv;
+            this._iserv = iserv;
             _repo = context;
-            userv = userserv;
         }
         public async Task<ServiceResponse<GetExchangeDTO>> EnactExchange(CreateExchangeDTO toCreate)
         {
-            async Task<GetExchangeDTO> rawCreation(object obj)
+            var sr = new ServiceResponse<GetExchangeDTO>();
+            try
             {
-                // Create the new Exchange object from the old one
-                var ce = (CreateExchangeDTO)obj;
-                Exchange nw = new()
-                {
-                    Id = Guid.NewGuid(),
-                    itemName = ce.itemName,
-                    itemDescription = ce.itemDescription,
-                    itemQuantity = ce.itemQuantity,
-                };
-
-                // Get the Sender and Reciever Users from Data context
-                nw.sender = ServiceHelper<User>.NoNullsAccepted(
-                    await _repo.Users
-                        .FirstOrDefaultAsync(u => u.Id == ce.sender)
-                );
-                nw.reciever = ServiceHelper<User>.NoNullsAccepted(
-                    await _repo.Users
-                        .FirstOrDefaultAsync(u => u.Id == ce.reciever)
-                );
-
-                // Enact changes
-                await _repo.Exchanges.AddAsync(nw);
-                await _repo.SaveChangesAsync();
-
-                // Return created object to Service Response
-                return new GetExchangeDTO(nw);
+                sr.Body = await InventoryExchangeHandler(toCreate);
             }
-            return await ServiceHelper<GetExchangeDTO>.ActionHandler(rawCreation, toCreate);
+            catch (Exception err)
+            {
+
+                throw new ExchangeException(err.Message);
+            }
+            return sr;
+            // Func<CreateExchangeDTO, bool, Task<GetExchangeDTO>> invExchangeHandler = this.InventoryExchangeHandler;
+            // return await ServiceHelper<GetExchangeDTO>.ActionHandler(invExchangeHandler,(object)toCreate,false);
         }
+
         public async Task<ServiceResponse<List<GetExchangeDTO>>> GetAllExchanges()
         {
             async Task<List<GetExchangeDTO>> rawGet(object a)
@@ -75,54 +62,109 @@ namespace DotnetBackend.Services.ExchangeServices
 
         public async Task<ServiceResponse<GetExchangeDTO>> RevertExchange(Guid toDelete)
         {
-            async Task<GetExchangeDTO> rawCreation(object obj)
-            {
-                // Request the Exchange object with the exchange data to remocve
-                var oldId = (Guid)obj;
-                var exToReomove = ServiceHelper<Exchange>.NoNullsAccepted(
-                    await _repo.Exchanges.FirstOrDefaultAsync(e => e.Id == oldId)
-                );
-
-                // Get the Sender and Reciever Users from Data context
-                var sender = ServiceHelper<User>.NoNullsAccepted(
-                    await _repo.Users
-                        .FirstOrDefaultAsync(u => u.Id == exToReomove.sender.Id)
-                );
-                var reciever = ServiceHelper<User>.NoNullsAccepted(
-                    await _repo.Users
-                        .FirstOrDefaultAsync(u => u.Id == exToReomove.reciever.Id)
-                );
-
-                // Enact changes
-                await _repo.SaveChangesAsync();
-
-                // Return created object to Service Response
-                return new GetExchangeDTO(exToReomove);
-            }
-            return await ServiceHelper<GetExchangeDTO>.ActionHandler(rawCreation, toDelete);
-        }
-
-        private void InventoryExchangeHandler(Exchange toManage, bool reverse = false){
-            var originUser = ServiceHelper<User>.NoNullsAccepted(toManage.sender);
-            var destinUser = ServiceHelper<User>.NoNullsAccepted(toManage.reciever);
-            if (reverse)
-            {
-                var temp = originUser;
-                originUser = destinUser;
-                destinUser = temp;
-            }
-            
+            var sr = new ServiceResponse<GetExchangeDTO>();
             try
             {
-                var orign = _repo.Items
-                    .Include(i=>i.Owner)
-                    .Where(i => i.Owner == originUser && i.Name==toManage.itemName && i.Description == toManage.itemDescription);
+                var toDeleteDTO = await GetDTOFromExchangeID(toDelete);
+                sr.Body = await InventoryExchangeHandler(toDeleteDTO, reverse: true);
             }
-            catch (System.Exception)
+            catch (Exception err)
             {
-                
-                throw;
+
+                throw new ExchangeException(err.Message);
             }
+            return sr;
         }
+
+        #region Auxiliary
+        private async Task<(User sender, User reciever)> VerifyUsersById(int idSender, int idReciever)
+        {
+            var currentSender = await awaitUserRequest(idSender);
+            var currentReciever = await awaitUserRequest(idReciever);
+            return (sender: currentReciever, reciever: currentReciever);
+        }
+
+        public async Task<GetExchangeDTO> InventoryExchangeHandler
+            (CreateExchangeDTO ce, bool reverse = false)
+        {
+            // Check if the Users Exist
+            // Get the Sender and Reciever Users from Data context
+            (var cSender, var cReciever) = await VerifyUsersById(ce.Sender, ce.Reciever);
+
+            //Request the sender's Inventory
+            var sendersInv = await _iserv.GetItemsOfUser(ce.Sender);
+
+            var exchangeItem = await _iserv.GetExistingItemRaw(
+                    cSender.Id, ce.ItemName, ce.ItemDescription);
+
+            // Check if the item is in the inventory of the Sender
+            if (_iserv.IsItemInList(sendersInv, ce.ItemName, ce.ItemDescription)
+                && exchangeItem.Quantity >= ce.ItemQuantity)
+            {
+                Exchange nw = new()
+                {
+                    Id = Guid.NewGuid(),
+                    itemName = ce.ItemName,
+                    itemDescription = ce.ItemDescription,
+                    itemQuantity = ce.ItemQuantity,
+                };
+
+                //Enact changes
+                // 1. Add Items to reciever's inventory
+                var responseFromAdding = await _iserv.CreateItem(
+                    new CreateIttemDTO()
+                    {
+                        Name = ce.ItemName,
+                        Description = ce.ItemDescription,
+                        Quantity = ce.ItemQuantity
+                    }
+                );
+
+                //2. Remove Items from sender's inventory
+                exchangeItem.Quantity -= ce.ItemQuantity;
+                var responseFromUpdating = await _iserv.UpdateItem(
+                    new UpdateItemDTO(exchangeItem));
+
+                if (responseFromAdding.Successfull && responseFromUpdating.Successfull)
+                {
+                    // Save record
+                    await _repo.Exchanges.AddAsync(nw);
+                    await _repo.SaveChangesAsync();
+
+                    // Return created object to Service Response
+                    return new GetExchangeDTO(nw);
+                }
+                else
+                {
+                    string msj = "The Requests couldn't be compleated:";
+                    msj = msj + $"On Adding:{responseFromAdding.Message}";
+                    msj = msj + $"\nOn Updating{responseFromUpdating.Message}";
+                    throw new ExchangeException(msj);
+                }
+            }
+            else
+            {
+                throw new ExchangeException(
+                    $"The Item requested is not in the inventory of user with ID: {ce.Sender}");
+            }
+
+        }
+
+        private async Task<User> awaitUserRequest(int userId)
+        {
+            return ServiceHelper<User>.NoNullsAccepted(await _userv.GetUserRaw(userId));
+        }
+
+
+        private async Task<CreateExchangeDTO> GetDTOFromExchangeID(Guid idn)
+        {
+            var requested = await _repo.Exchanges.FirstOrDefaultAsync(u => u.Id == idn);
+            return new CreateExchangeDTO(ServiceHelper<Exchange>.NoNullsAccepted(requested));
+        }
+        private class ExchangeException : Exception
+        {
+            public ExchangeException(string Message) : base(message: Message) { }
+        }
+        #endregion
     }
 }

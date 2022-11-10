@@ -56,8 +56,10 @@ namespace DotnetBackend.Services.UserServices
             var rawList = await _repo.Users
                    .Include(u => u.Items)
                    .ToListAsync();
+
             var dtoList = new List<GetUserDTO>();
             rawList.ForEach(u => dtoList.Add(new GetUserDTO(u)));
+
             return new ServiceResponse<List<GetUserDTO>>()
             {
                 Body = dtoList

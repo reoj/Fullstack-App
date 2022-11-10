@@ -37,7 +37,7 @@ namespace DotnetBackend.Services.Inventory
                     var oldItem = ServiceHelper<List<InventoryItem>>.NoNullsAccepted(
                         targetUser.Items)
                         .Find(i => i.Name == ci.Name && ci.Description == i.Description);
-                    
+
                     // Update the Item
                     oldItem = ServiceHelper<InventoryItem>.NoNullsAccepted(oldItem);
                     oldItem.Quantity += ci.Quantity;
@@ -153,9 +153,18 @@ namespace DotnetBackend.Services.Inventory
             return userInv;
         }
 
-        private bool IsItemInList(List<InventoryItem> list, string name, string description)
+        public bool IsItemInList(List<InventoryItem> list, string name, string description)
         {
             return list.Exists(i => i.Name == name && i.Description == description);
+        }
+
+        public async Task<InventoryItem> GetExistingItemRaw(int userid, string name, string description)
+        {
+            var reItem = await _repo.Items
+                .Include(i=> i.Owner)
+                .FirstOrDefaultAsync(
+                    i=>i.Owner.Id == userid && i.Name == name && i.Description == description);
+            return ServiceHelper<InventoryItem>.NoNullsAccepted(reItem);
         }
     }
 }

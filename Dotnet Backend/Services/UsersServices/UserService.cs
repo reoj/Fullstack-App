@@ -30,7 +30,7 @@ namespace DotnetBackend.Services.UserServices
                     Email = current.Email,
                     UserType = (UserType_Enum)current.UserType
                 };
-                var added = _repo.Users.AddAsync(nw);
+                var added = await _repo.Users.AddAsync(nw);
                 _ = await _repo.SaveChangesAsync();
                 return ServiceHelper<User>.NoNullsAccepted(await _repo.Users.FirstOrDefaultAsync(u => u.Phone == nw.Phone));
             }

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using DotnetBackend.Models;
 
 namespace DotnetBackend.Services
@@ -22,7 +18,7 @@ namespace DotnetBackend.Services
             try
             {
                 //Atempt to create a successfull response with the data given
-                response.Body = await fn(args);
+                response.Body = await fn(args[0]);
                 response.Successfull = true;
             }
             catch (Exception err)

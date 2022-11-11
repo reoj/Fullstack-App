@@ -23,7 +23,7 @@ namespace DotnetBackend.Controllers
 
         #region Endpoints
         [HttpGet("GetAll")]
-        public async Task<ActionResult<ServiceResponse<User>>> GetAllUsers(int id)
+        public async Task<ActionResult<ServiceResponse<User>>> GetAllUsers()
         {
             var result = await _users.GetAllUsers();
             return result.Successfull ? Ok(result) : NotFound(result);

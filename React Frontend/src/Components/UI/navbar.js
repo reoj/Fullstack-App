@@ -11,6 +11,9 @@ function Navbar() {
         <li className="nav-item">
           <NavLink className="nav-link" to="/Items">Items</NavLink>
         </li>
+        <li className="nav-item">
+          <NavLink className="nav-link" to="/Trades">Trades</NavLink>
+        </li>
       </ul>
     </Fragment>
   );

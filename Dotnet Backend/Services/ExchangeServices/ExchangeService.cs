@@ -41,9 +41,13 @@ namespace DotnetBackend.Services.ExchangeServices
         {
             async Task<List<GetExchangeDTO>> rawGet(object a)
             {
-                var exchanges = await _repo.Exchanges.ToListAsync();
+                _ = (int)a;
+                var exchanges = await _repo.Exchanges
+                    .Include(e=>e.sender)
+                    .Include(e=>e.reciever)
+                    .ToListAsync();
                 var dtoExchanges = new List<GetExchangeDTO>();
-                exchanges.ForEach(e => dtoExchanges.Add(new GetExchangeDTO(e)));
+                exchanges.ForEach(e => dtoExchanges.Add(Mappings.AsGetEchangeDTO(e)));
                 return dtoExchanges;
             };
             return await ServiceHelper<List<GetExchangeDTO>>.ActionHandler(rawGet, 0);
@@ -57,7 +61,7 @@ namespace DotnetBackend.Services.ExchangeServices
 
                 //Find the Exchange object based on the GUID
                 var requested = await _repo.Exchanges.FirstOrDefaultAsync(u => u.Id == idn);
-                return new GetExchangeDTO(ServiceHelper<Exchange>.NoNullsAccepted(requested));
+                return Mappings.AsGetEchangeDTO(ServiceHelper<Exchange>.NoNullsAccepted(requested));
             }
 
             return await ServiceHelper<GetExchangeDTO>.ActionHandler(rawGetter, requested);
@@ -70,6 +74,7 @@ namespace DotnetBackend.Services.ExchangeServices
             {
                 var toDeleteDTO = await GetDTOFromExchangeID(toDelete);
                 sr.Body = await InventoryExchangeHandler(toDeleteDTO, reverse: true);
+                sr.Successfull = true;
             }
             catch (Exception err)
             {
@@ -109,6 +114,8 @@ namespace DotnetBackend.Services.ExchangeServices
                     Exchange nw = new()
                     {
                         Id = Guid.NewGuid(),
+                        sender = cSender,
+                        reciever = cReciever,
                         itemName = ce.ItemName,
                         itemDescription = ce.ItemDescription,
                         itemQuantity = ce.ItemQuantity,
@@ -133,12 +140,13 @@ namespace DotnetBackend.Services.ExchangeServices
 
                     if (responseFromAdding.Successfull && responseFromUpdating.Successfull)
                     {
+
                         // Save record
                         await _repo.Exchanges.AddAsync(nw);
                         await _repo.SaveChangesAsync();
 
                         // Return created object to Service Response
-                        return new GetExchangeDTO(nw);
+                        return Mappings.AsGetEchangeDTO(nw);
                     }
                     else
                     {
@@ -151,7 +159,7 @@ namespace DotnetBackend.Services.ExchangeServices
                 else
                 {
                     throw new ExchangeException(
-                        $"The Item requested is not in the inventory of user with ID: {ce.Sender}");
+                        $"The Item requested Item is not in the inventory of user with ID: {ce.Sender}");
                 }
             }
             catch (Exception)
@@ -170,7 +178,10 @@ namespace DotnetBackend.Services.ExchangeServices
 
         private async Task<CreateExchangeDTO> GetDTOFromExchangeID(Guid idn)
         {
-            var requested = await _repo.Exchanges.FirstOrDefaultAsync(u => u.Id == idn);
+            var requested = await _repo.Exchanges
+                .Include(e=>e.sender)
+                .Include(e=>e.reciever)
+                .FirstOrDefaultAsync(u => u.Id == idn);
             return Mappings.AsCreateExchangeDTO(ServiceHelper<Exchange>.NoNullsAccepted(requested));
         }
         private class ExchangeException : Exception

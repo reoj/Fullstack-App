@@ -1,5 +1,5 @@
 import { setErrorState, setLoadingState } from "../UI/fetching-state-redux-slice";
-import { addTradeR, refreshTrades, removeTradeR } from "./trade-redux-slice";
+import { addTradeR, refreshTrades } from "./trade-redux-slice";
 
 export function fetchInitialState() {
   return async (dispatch) => {
@@ -47,7 +47,7 @@ export function sendNewTrade(payload) {
       dispatch(fetchInitialState());
     } catch (error) {
       dispatch(setLoadingState(false));
-      dispatch(setErrorState("The User couldn't be added " + error));
+      dispatch(setErrorState("The Trade couldn't be added " + error));
     }
   };
 }
@@ -56,7 +56,7 @@ export function sendDeleteTrade(payload) {
   return async (dispatch) => {
     try {
       const response = await fetch(
-        "https://localhost:7158/Exchange/" + JSON.stringify(payload),
+        "https://localhost:7158/Exchange/" + payload,
         {
           method: "DELETE",
           headers: {
@@ -71,11 +71,11 @@ export function sendDeleteTrade(payload) {
       }
       const data = await response.json();
 
-      dispatch(removeTradeR(data.body.id));
+      dispatch(addTradeR(data.body.id));
       dispatch(fetchInitialState());
     } catch (error) {
       dispatch(setLoadingState(false));
-      dispatch(setErrorState("The User couldn't be Deleted: " + error));
+      dispatch(setErrorState("The Trade couldn't be Deleted: " + error));
     }
   };
 }

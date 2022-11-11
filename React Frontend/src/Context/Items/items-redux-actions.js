@@ -63,7 +63,7 @@ export function sendDeleteItem(payload) {
     try {
       dispatch(setErrorState(""));
       const response = await fetch(
-        "https://localhost:7158/Inventory/" + JSON.stringify(payload),
+        "https://localhost:7158/Inventory/" + payload,
         {
           method: "DELETE",
           headers: {

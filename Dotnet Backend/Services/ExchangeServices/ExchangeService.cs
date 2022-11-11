@@ -4,6 +4,7 @@ using DotnetBackend.Services.Inventory;
 using DotnetBackend.Services.UserServices;
 using Microsoft.EntityFrameworkCore;
 using users_items_backend.Context;
+using users_items_backend.DTOs;
 
 namespace DotnetBackend.Services.ExchangeServices
 {
@@ -124,8 +125,7 @@ namespace DotnetBackend.Services.ExchangeServices
                 //2. Remove Items from sender's inventory
                 exchangeItem.Quantity -= ce.ItemQuantity;
                 exchangeItem.UserId = cSender.Id;
-                var responseFromUpdating = await _iserv.UpdateItem(
-                    new UpdateItemDTO(exchangeItem));
+                var responseFromUpdating = await _iserv.UpdateItem(Mappings.AsUpdateItemDTO(exchangeItem));
 
                 if (responseFromAdding.Successfull && responseFromUpdating.Successfull)
                 {

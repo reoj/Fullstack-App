@@ -6,6 +6,9 @@ using DotnetBackend.Services.UserServices;
 
 namespace DotnetBackend.Services.Inventory
 {
+    /// <summary>
+    /// Service for the InventoryItems
+    /// </summary>
     public class ItemService : IInventoryService
     {
         public DataContext _repo { get; set; }
@@ -20,6 +23,11 @@ namespace DotnetBackend.Services.Inventory
         #endregion
 
         #region Public Async Methods
+        /// <summary>
+        /// Adds an Item to the DB
+        /// </summary>
+        /// <param name="currenItem">The DTO that encapsulates the data recieved from the Frontend</param>
+        /// <returns>An async ServiceResponse stating weather or not the creation was successfull</returns>
         public async Task<ServiceResponse<GetItemDTO>> CreateItem(CreateIttemDTO currenItem)
         {
 
@@ -73,6 +81,11 @@ namespace DotnetBackend.Services.Inventory
             return await ServiceHelper<GetItemDTO>.ActionHandler(rawCreation, currenItem);
         }
 
+        /// <summary>
+        /// Deletes an Item from the DB
+        /// </summary>
+        /// <param name="id">The GUID identifying the Item to delete</param>
+        /// <returns>An async ServiceResponse stating weather or not the deletion was successfull</returns>
         public async Task<ServiceResponse<GetItemDTO>> DeleteItem(Guid id)
         {
             async Task<GetItemDTO> rawElimination(object obj)
@@ -92,6 +105,11 @@ namespace DotnetBackend.Services.Inventory
             return await ServiceHelper<GetItemDTO>.ActionHandler(rawElimination, id);
         }
 
+        /// <summary>
+        /// Returns a single Item from the DB
+        /// </summary>
+        /// <param name="id">The GUID identifying the Item to get</param>
+        /// <returns>An async ServiceResponse stating weather or not the request was successfull</returns>
         public async Task<ServiceResponse<GetItemDTO>> GetItem(Guid id)
         {
             async Task<GetItemDTO> rawGetter(object obj)
@@ -104,6 +122,10 @@ namespace DotnetBackend.Services.Inventory
             return await ServiceHelper<GetItemDTO>.ActionHandler(rawGetter, id);
         }
 
+        /// <summary>
+        /// Requests the DB to display all InventoryItems
+        /// </summary>
+        /// <returns>An async ServiceResponse stating weather or not the request was successfull</returns>
         public async Task<ServiceResponse<List<GetItemDTO>>> GetAllItems()
         {
             async Task<List<GetItemDTO>> rawGet(object a)
@@ -117,6 +139,11 @@ namespace DotnetBackend.Services.Inventory
 
         }
 
+        /// <summary>
+        /// Updates an InventoryItem in the DB
+        /// </summary>
+        /// <param name="currenItem">A Data Transfer Object with the new information but the original GUID</param>
+        /// <returns>An async ServiceResponse stating weather or not the changes in DB were successfull</returns>
         public async Task<ServiceResponse<GetItemDTO>> UpdateItem(UpdateItemDTO currenItem)
         {
             async Task<GetItemDTO> rawUpdate(object obj)
@@ -139,6 +166,12 @@ namespace DotnetBackend.Services.Inventory
         #endregion
 
         #region Helper Methods
+        /// <summary>
+        /// Requests the Items in the User's Inventory
+        /// </summary>
+        /// <param name="userId">The ID of the User of which the Inventory is requested</param>
+        /// <returns>An async List with the Items in the User's Inventory</returns>
+        /// <exception cref="NullReferenceException">When the UserID doesn't exists in the DB</exception>
         public async Task<List<InventoryItem>> GetItemsOfUser(int userId)
         {
             List<InventoryItem> userInv = new();
@@ -154,11 +187,25 @@ namespace DotnetBackend.Services.Inventory
             return userInv;
         }
 
+        /// <summary>
+        /// Checks if the given List contains an item with the same name and description
+        /// </summary>
+        /// <param name="list">The inventory of items to check</param>
+        /// <param name="name">The name of the Item to find</param>
+        /// <param name="description">The description to match with the name of the Item</param>
+        /// <returns>True if the Item is in the Inventory, false if it's not</returns>
         public bool IsItemInList(List<InventoryItem> list, string name, string description)
         {
             return list.Exists(i => i.Name == name && i.Description == description);
         }
 
+        /// <summary>
+        /// Auxiliary method to find am existing item owned by a specific user
+        /// </summary>
+        /// <param name="userid">The ID of the owner User</param>
+        /// <param name="name">The name of the Item to find</param>
+        /// <param name="description">The description of the Item to find</param>
+        /// <returns>The Item object that matches the given parameters</returns>
         public async Task<InventoryItem> GetExistingItemRaw(int userid, string name, string description)
         {
             var reItem = await _repo.Items

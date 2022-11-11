@@ -24,7 +24,7 @@ builder.Services.AddSwaggerGen( // Enabling the authentication for Swagger UI
     {
         cnfg.SwaggerDoc("v1", new OpenApiInfo
         {
-            Title = "RPG Test API",
+            Title = "Fullstack Integration Project",
             Description = "Evidence Fullstack project for the .Net Accademy",
             Contact = new OpenApiContact
             {

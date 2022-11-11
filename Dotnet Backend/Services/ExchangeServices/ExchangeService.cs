@@ -54,6 +54,8 @@ namespace DotnetBackend.Services.ExchangeServices
             async Task<GetExchangeDTO> rawGetter(object obj)
             {
                 var idn = (Guid)obj;
+
+                //Find the Exchange object based on the GUID
                 var requested = await _repo.Exchanges.FirstOrDefaultAsync(u => u.Id == idn);
                 return new GetExchangeDTO(ServiceHelper<Exchange>.NoNullsAccepted(requested));
             }

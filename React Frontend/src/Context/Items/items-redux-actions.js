@@ -73,7 +73,8 @@ export function sendDeleteItem(payload) {
       );
 
       if (!response.ok) {
-        throw new Error(response.statusText);
+        const data = await response.json()
+        throw new Error(data.message);
       }
       const data = await response.json();
 
@@ -100,7 +101,8 @@ export function sendEditItem(payload) {
       });
 
       if (!response.ok) {
-        throw new Error(response.statusText);
+        const data = await response.json()
+        throw new Error(data.message);
       }
       const data = await response.json();
 

@@ -14,7 +14,8 @@ export function fetchInitialState() {
       const response = await fetch("https://localhost:7158/Users/GetAll");
 
       if (!response.ok) {
-        throw new Error("Could not fetch cart data!");
+        const data = await response.json()
+        throw new Error(data.message);
       }
 
       const data = await response.json();
@@ -42,8 +43,8 @@ export function sendNewUser(payload) {
       });
 
       if (!response.ok) {
-        
-        throw new Error(response.body);
+        const data = await response.json()
+        throw new Error(data.message);
       }
       const data = await response.json();
 
@@ -70,7 +71,8 @@ export function sendDeleteUser(payload) {
       );
 
       if (!response.ok) {
-        throw new Error(response.statusText);
+        const data = await response.json()
+        throw new Error(data.message);
       }
       const data = await response.json();
 
@@ -95,7 +97,8 @@ export function sendEditUser(payload) {
       });
 
       if (!response.ok) {
-        throw new Error(response.statusText);
+        const data = await response.json()
+        throw new Error(data.message);
       }
       const data = await response.json();
 

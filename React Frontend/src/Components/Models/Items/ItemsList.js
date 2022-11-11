@@ -12,7 +12,7 @@ function ItemsList(props) {
 
   useEffect(() => {
     dsp(fetchInitialState());
-  }, [])
+  }, [dsp])
   
 
   const properties = ["ID", "Name", "Description", "Quantity","Owner ID"];

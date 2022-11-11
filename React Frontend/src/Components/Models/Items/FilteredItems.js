@@ -12,7 +12,7 @@ function FilteredItems(props) {
   const dsp = useDispatch()
   useEffect(() => {
     dsp(fetchInitialState());
-  }, [])
+  }, [dsp])
 
   const itemsList = fullList.filter(i=> i.userId === +userOnDisplay.userId)
 

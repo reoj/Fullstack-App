@@ -128,7 +128,7 @@ namespace DotnetBackend.Services.Inventory
                 old.Quantity = ci.Quantity;
                 old.Name = ci.Name;
                 old.Description = ci.Description;
-                old.UserId = ci.UserId;
+                old.UserId = ci.userId;
 
                 await _repo.SaveChangesAsync();
                 return new GetItemDTO(old);
@@ -138,6 +138,7 @@ namespace DotnetBackend.Services.Inventory
 
         #endregion
 
+        #region Helper Methods
         public async Task<List<InventoryItem>> GetItemsOfUser(int userId)
         {
             List<InventoryItem> userInv = new();
@@ -166,5 +167,6 @@ namespace DotnetBackend.Services.Inventory
                     i=>i.Owner.Id == userid && i.Name == name && i.Description == description);
             return ServiceHelper<InventoryItem>.NoNullsAccepted(reItem);
         }
+        #endregion
     }
 }

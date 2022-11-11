@@ -11,7 +11,7 @@ function UsersList(props) {
 
   useEffect(() => {
     dsp(fetchInitialState());
-  }, [])
+  }, [dsp])
 
   const properties = ["ID", "Name", "Class","E-mail","Phone", "Items"];
 
@@ -21,7 +21,7 @@ function UsersList(props) {
         {usersList.map((u) => {
           return (
             <UserSingle
-              key={"User__" + u.idUser.toString()}
+              key={"User__" + u.idUser}
               idn={u.idUser}
               name={u.name}
               cl = {u.userType}

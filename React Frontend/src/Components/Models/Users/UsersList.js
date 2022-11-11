@@ -2,7 +2,7 @@ import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TableDisplayer from "../../UI/TableDisplayer";
 import UserSingle from "./UserSingle";
-import { fetchInitialState } from "../../../Context/users-redux-actions";
+import { fetchInitialState } from "../../../Context/Users/users-redux-actions";
 
 
 function UsersList(props) {

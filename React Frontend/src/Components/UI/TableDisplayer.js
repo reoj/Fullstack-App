@@ -4,7 +4,7 @@ import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import AddUser from "../Models/Users/AddUser";
 import AddItem from "../Models/Items/AddItem";
-import ModalContext from "../../Context/modal-context";
+import ModalContext from "../../Context/UI/modal-context";
 import CustomModal from "./CustomModal";
 
 function TableDisplayer(props) {

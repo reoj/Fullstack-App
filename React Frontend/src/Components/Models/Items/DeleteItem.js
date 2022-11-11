@@ -1,10 +1,10 @@
 import React, { Fragment, useContext } from "react";
 import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/Modal";
-import ModalContext from "../../../Context/modal-context";
+import ModalContext from "../../../Context/UI/modal-context";
 import { useDispatch } from "react-redux";
 import Table from "react-bootstrap/Table";
-import { sendDeleteItem } from "../../../Context/items-redux-actions";
+import { sendDeleteItem } from "../../../Context/Items/items-redux-actions";
 
 function DeleteItem(props) {
   const modalCtx = useContext(ModalContext);

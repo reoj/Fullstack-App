@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import ModalContext from "../../../Context/modal-context";
+import ModalContext from "../../../Context/UI/modal-context";
 import ActionButtons from "../../UI/ActionButtons";
 import DeleteItem from "./DeleteItem";
 import EditItem from "./EditItem";

@@ -2,7 +2,7 @@ import React, { useEffect, Fragment} from "react";
 import { useSelector } from "react-redux";
 import TableDisplayer from "../../UI/TableDisplayer";
 import ItemSingle from "./ItemSingle";
-import { fetchInitialState } from "../../../Context/items-redux-actions";
+import { fetchInitialState } from "../../../Context/Items/items-redux-actions";
 import { useDispatch } from "react-redux";
 
 function ItemsList(props) {

@@ -3,8 +3,8 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch } from "react-redux";
-import { sendNewItem } from "../../../Context/items-redux-actions";
-import ModalContext from "../../../Context/modal-context";
+import { sendNewItem } from "../../../Context/Items/items-redux-actions";
+import ModalContext from "../../../Context/UI/modal-context";
 
 function AddItem(props) {
   const descfieldRef = useRef();

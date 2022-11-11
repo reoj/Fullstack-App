@@ -1,9 +1,9 @@
 import React, { Fragment, useContext } from "react";
 import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/Modal";
-import ModalContext from "../../../Context/modal-context";
+import ModalContext from "../../../Context/UI/modal-context";
+import { sendDeleteUser } from "../../../Context/Users/users-redux-actions";
 import { useDispatch } from "react-redux";
-import { sendDeleteUser } from "../../../Context/users-redux-actions";
 import Table from "react-bootstrap/Table";
 
 function DeleteUser(props) {

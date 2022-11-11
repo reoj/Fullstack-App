@@ -2,9 +2,9 @@ import React, { useContext, useRef } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/Modal";
-import ModalContext from "../../../Context/modal-context";
+import ModalContext from "../../../Context/UI/modal-context";
 import { useDispatch } from "react-redux";
-import { sendEditUser } from "../../../Context/users-redux-actions";
+import { sendEditUser } from "../../../Context/Users/users-redux-actions";
 
 
 function EditUser(props) {

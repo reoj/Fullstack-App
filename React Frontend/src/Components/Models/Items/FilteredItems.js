@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {useParams} from "react-router-dom"
-import { fetchInitialState } from "../../../Context/items-redux-actions";
+import { fetchInitialState } from "../../../Context/Items/items-redux-actions";
 import TableDisplayer from "../../UI/TableDisplayer";
 import ItemSingle from "./ItemSingle";
 

@@ -1,4 +1,4 @@
-import { setErrorState, setLoadingState } from "./fetching-state-redux-slice";
+import { setErrorState, setLoadingState } from "../UI/fetching-state-redux-slice";
 import {
   refreshUsers,
   addUserR,

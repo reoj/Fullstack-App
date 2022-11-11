@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import Button from "react-bootstrap/esm/Button";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
-import ModalContext from "../../../Context/modal-context";
+import ModalContext from "../../../Context/UI/modal-context";
 import ActionButtons from "../../UI/ActionButtons";
 import DeleteUser from "./DeleteUser";
 import EditUser from "./EditUser";
-import { editUserR } from "../../../Context/user-redux-slice";
+import { editUserR } from "../../../Context/Users/user-redux-slice";
 
 function UserSingle(props) {
   const context = useContext(ModalContext);

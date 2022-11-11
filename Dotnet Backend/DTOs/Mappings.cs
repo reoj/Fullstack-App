@@ -25,5 +25,17 @@ namespace users_items_backend.DTOs
                 userId = it.UserId,
             };
         }
+
+        public static CreateExchangeDTO AsCreateExchangeDTO(Exchange ex)
+        {
+            return new CreateExchangeDTO()
+            {
+                Sender = ex.sender.Id,
+                Reciever = ex.reciever.Id,
+                ItemName = ex.itemName,
+                ItemDescription = ex.itemDescription,
+                ItemQuantity = ex.itemQuantity,
+            };
+        }
     }
 }

@@ -163,7 +163,7 @@ namespace DotnetBackend.Services.ExchangeServices
         private async Task<CreateExchangeDTO> GetDTOFromExchangeID(Guid idn)
         {
             var requested = await _repo.Exchanges.FirstOrDefaultAsync(u => u.Id == idn);
-            return new CreateExchangeDTO(ServiceHelper<Exchange>.NoNullsAccepted(requested));
+            return Mappings.AsCreateExchangeDTO(ServiceHelper<Exchange>.NoNullsAccepted(requested));
         }
         private class ExchangeException : Exception
         {

@@ -23,7 +23,7 @@ namespace DotnetBackend.Controllers
 
         #region Endpoints
         [HttpGet("GetAll")]
-        public async Task<ActionResult<ServiceResponse<GetItemDTO>>> GetAllItems(Guid id)
+        public async Task<ActionResult<ServiceResponse<GetItemDTO>>> GetAllItems()
         {
             var result = await _inventory.GetAllItems();
             return result.Successfull ? Ok(result) : NotFound(result);

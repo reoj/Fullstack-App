@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DotnetBackend.Controllers
 {
+    [ApiController]
     [Route("[controller]")]
     public class ExchangeController : Controller
     {

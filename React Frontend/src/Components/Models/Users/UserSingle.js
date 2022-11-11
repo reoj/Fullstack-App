@@ -14,14 +14,35 @@ function UserSingle(props) {
     mc({
       onDisplay: true,
       title: "Editing User",
-      body: <EditUser inhf={editUserR} item={{ id: props.idn, name: props.name, cl: props.cl}} />,
+      body: (
+        <EditUser
+          inhf={editUserR}
+          item={{
+            id: props.idn,
+            name: props.name,
+            cl: props.cl,
+            email: props.email,
+            phone: props.phone,
+          }}
+        />
+      ),
     });
   }
   function onDeleteHandler(params) {
     mc({
       onDisplay: true,
       title: "Please confirm deletion of the following User",
-      body: <DeleteUser item={{ id: props.idn, name: props.name, cl: props.cl}} />,
+      body: (
+        <DeleteUser
+          item={{
+            id: props.idn,
+            name: props.name,
+            cl: props.cl,
+            email: props.email,
+            phone: props.phone,
+          }}
+        />
+      ),
     });
   }
   return (
@@ -32,7 +53,7 @@ function UserSingle(props) {
       <td>{props.email}</td>
       <td>{props.phone}</td>
       <td>
-        <Link to={"/Filtered-items/"+ props.idn}>
+        <Link to={"/Filtered-items/" + props.idn}>
           <Button variant="primary" key={"itemsOf_" + props.itemID}>
             View
           </Button>

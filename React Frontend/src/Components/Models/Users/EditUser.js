@@ -4,6 +4,7 @@ import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/Modal";
 import ModalContext from "../../../Context/modal-context";
 import { useDispatch } from "react-redux";
+import { sendEditUser } from "../../../Context/users-redux-actions";
 
 
 function EditUser(props) {
@@ -12,6 +13,8 @@ function EditUser(props) {
 
   const namefieldRef = useRef();
   const clfieldRef = useRef();
+  const emailfieldRef = useRef();
+  const phonefieldRef = useRef();
 
   const dsp = useDispatch();
 
@@ -30,10 +33,12 @@ function EditUser(props) {
       return;
     }
     dsp(
-      props.inhf({
-        id:props.item.id,
+      sendEditUser({
+        userId:props.item.id,
         name: namefieldRef.current.value,
-        utype: clfieldRef.current.value,
+        userType: clfieldRef.current.value,
+        email: emailfieldRef.current.value,
+        phone: phonefieldRef.current.value
       })
     );
     onCloseHandle(oldData);
@@ -71,6 +76,26 @@ function EditUser(props) {
             ref={clfieldRef}
             onFocus={onInputClarity}
             defaultValue={props.item.cl}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="form_Name">
+          <Form.Label>E-mail</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="user@email.com"
+            ref={emailfieldRef}
+            onFocus={onInputClarity}
+            defaultValue={props.item.email}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="form_Name">
+          <Form.Label>Phone</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="000-000-0000"
+            ref={phonefieldRef}
+            onFocus={onInputClarity}
+            defaultValue={props.item.phone}
           />
         </Form.Group>
       </Modal.Body>

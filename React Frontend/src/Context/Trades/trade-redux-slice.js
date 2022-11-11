@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const itemSlice = createSlice({
+export const tradeSlice = createSlice({
   name: "trades",
   initialState: {
     value: { list: [] },
@@ -10,6 +10,10 @@ export const itemSlice = createSlice({
       const nwList = state.value.list;
       nwList.push({
         id: action.payload.id,
+        sender: action.payload.sender,
+        reciever: action.payload.reciever,
+        itemName: action.payload.itemName,
+        itemQuantity: action.payload.itemQuantity,
       });
       state.value.list = nwList;
     },
@@ -22,19 +26,11 @@ export const itemSlice = createSlice({
       nwList.splice(index, 1);
       state.value.list = nwList;
     },
-    editTradeR: (state, action) => {
-      const idToEdit = action.payload.id;
-      const oldItemIndex = state.value.list.findIndex((e) => {
-        return e.id === idToEdit;
-      });
-      state.value.list[oldItemIndex] = action.payload;
-    },
     refreshTrades: (state, action) => {
       state.value.list = action.payload;
     },
   },
 });
 
-export const { addItemR, removeItemR, editItemR, refreshItems } =
-  itemSlice.actions;
-export default itemSlice.reducer;
+export const { addTradeR, removeTradeR, refreshTrades } = tradeSlice.actions;
+export default tradeSlice.reducer;

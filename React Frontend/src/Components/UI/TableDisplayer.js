@@ -6,6 +6,7 @@ import AddUser from "../Models/Users/AddUser";
 import AddItem from "../Models/Items/AddItem";
 import ModalContext from "../../Context/UI/modal-context";
 import CustomModal from "./CustomModal";
+import EnactTrade from "../Models/Trades/EnactTrade";
 
 function TableDisplayer(props) {
   const fielsList = props.colList;
@@ -29,6 +30,13 @@ function TableDisplayer(props) {
         onDisplay: true,
         title: "Adding Item",
         body: <AddItem />,
+      });
+    }
+    if (props.modelType === "Trades") {
+      setModalProperties({
+        onDisplay: true,
+        title: "Adding Item",
+        body: <EnactTrade/>,
       });
     }
   }

@@ -40,12 +40,19 @@ namespace DotnetBackend.Services
         /// <exception cref="NullReferenceException"></exception>
         public static T NoNullsAccepted(T? toCheck)
         {
-            if (toCheck is null)
+            try
             {
-                throw new NullReferenceException(
-                    $"No object could be found with that information");
+                if (toCheck is null)
+                {
+                    throw new NullReferenceException(
+                        $"No object could be found with that information");
+                }
+                return toCheck;
             }
-            return toCheck;
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         #endregion

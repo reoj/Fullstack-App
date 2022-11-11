@@ -29,8 +29,8 @@ namespace DotnetBackend.Services.ExchangeServices
             }
             catch (Exception err)
             {
-
-                throw new ExchangeException(err.Message);
+                sr.Successfull = false;
+                sr.Message = err.Message;
             }
             return sr;
             // Func<CreateExchangeDTO, bool, Task<GetExchangeDTO>> invExchangeHandler = this.InventoryExchangeHandler;
@@ -90,66 +90,74 @@ namespace DotnetBackend.Services.ExchangeServices
         public async Task<GetExchangeDTO> InventoryExchangeHandler
             (CreateExchangeDTO ce, bool reverse = false)
         {
-            // Check if the Users Exist
-            // Get the Sender and Reciever Users from Data context
-            (var cSender, var cReciever) = reverse == false ? await VerifyUsersById(ce.Sender, ce.Reciever) : await VerifyUsersById(ce.Reciever, ce.Sender);
-
-            //Request the sender's Inventory
-            var sendersInv = await _iserv.GetItemsOfUser(ce.Sender);
-
-            var exchangeItem = await _iserv.GetExistingItemRaw(
-                    cSender.Id, ce.ItemName, ce.ItemDescription);
-
-            // Check if the item is in the inventory of the Sender
-            if (_iserv.IsItemInList(sendersInv, ce.ItemName, ce.ItemDescription)
-                && exchangeItem.Quantity >= ce.ItemQuantity)
+            try
             {
-                Exchange nw = new()
-                {
-                    Id = Guid.NewGuid(),
-                    itemName = ce.ItemName,
-                    itemDescription = ce.ItemDescription,
-                    itemQuantity = ce.ItemQuantity,
-                };
+                // Check if the Users Exist
+                // Get the Sender and Reciever Users from Data context
+                (var cSender, var cReciever) = reverse == false ? await VerifyUsersById(ce.Sender, ce.Reciever) : await VerifyUsersById(ce.Reciever, ce.Sender);
 
-                //Enact changes
-                // 1. Add Items to reciever's inventory
-                var responseFromAdding = await _iserv.CreateItem(
-                    new CreateIttemDTO()
+                //Request the sender's Inventory
+                var sendersInv = await _iserv.GetItemsOfUser(ce.Sender);
+
+                var exchangeItem = await _iserv.GetExistingItemRaw(
+                        cSender.Id, ce.ItemName, ce.ItemDescription);
+
+                // Check if the item is in the inventory of the Sender
+                if (_iserv.IsItemInList(sendersInv, ce.ItemName, ce.ItemDescription)
+                    && exchangeItem.Quantity >= ce.ItemQuantity)
+                {
+                    Exchange nw = new()
                     {
-                        UserId = cReciever.Id,
-                        Name = ce.ItemName,
-                        Description = ce.ItemDescription,
-                        Quantity = ce.ItemQuantity
+                        Id = Guid.NewGuid(),
+                        itemName = ce.ItemName,
+                        itemDescription = ce.ItemDescription,
+                        itemQuantity = ce.ItemQuantity,
+                    };
+
+                    //Enact changes
+                    // 1. Add Items to reciever's inventory
+                    var responseFromAdding = await _iserv.CreateItem(
+                        new CreateIttemDTO()
+                        {
+                            UserId = cReciever.Id,
+                            Name = ce.ItemName,
+                            Description = ce.ItemDescription,
+                            Quantity = ce.ItemQuantity
+                        }
+                    );
+
+                    //2. Remove Items from sender's inventory
+                    exchangeItem.Quantity -= ce.ItemQuantity;
+                    exchangeItem.UserId = cSender.Id;
+                    var responseFromUpdating = await _iserv.UpdateItem(Mappings.AsUpdateItemDTO(exchangeItem));
+
+                    if (responseFromAdding.Successfull && responseFromUpdating.Successfull)
+                    {
+                        // Save record
+                        await _repo.Exchanges.AddAsync(nw);
+                        await _repo.SaveChangesAsync();
+
+                        // Return created object to Service Response
+                        return new GetExchangeDTO(nw);
                     }
-                );
-
-                //2. Remove Items from sender's inventory
-                exchangeItem.Quantity -= ce.ItemQuantity;
-                exchangeItem.UserId = cSender.Id;
-                var responseFromUpdating = await _iserv.UpdateItem(Mappings.AsUpdateItemDTO(exchangeItem));
-
-                if (responseFromAdding.Successfull && responseFromUpdating.Successfull)
-                {
-                    // Save record
-                    await _repo.Exchanges.AddAsync(nw);
-                    await _repo.SaveChangesAsync();
-
-                    // Return created object to Service Response
-                    return new GetExchangeDTO(nw);
+                    else
+                    {
+                        string msj = "The Requests couldn't be compleated:";
+                        msj += $"On Adding:{responseFromAdding.Message}";
+                        msj += $"\nOn Updating{responseFromUpdating.Message}";
+                        throw new ExchangeException(msj);
+                    }
                 }
                 else
                 {
-                    string msj = "The Requests couldn't be compleated:";
-                    msj += $"On Adding:{responseFromAdding.Message}";
-                    msj += $"\nOn Updating{responseFromUpdating.Message}";
-                    throw new ExchangeException(msj);
+                    throw new ExchangeException(
+                        $"The Item requested is not in the inventory of user with ID: {ce.Sender}");
                 }
             }
-            else
+            catch (Exception)
             {
-                throw new ExchangeException(
-                    $"The Item requested is not in the inventory of user with ID: {ce.Sender}");
+
+                throw;
             }
 
         }

@@ -1,6 +1,5 @@
 ﻿using DotnetBackend.DTOs;
 using DotnetBackend.Models;
-using System.Xml.Linq;
 
 namespace users_items_backend.DTOs
 {
@@ -36,6 +35,19 @@ namespace users_items_backend.DTOs
                 ItemDescription = ex.itemDescription,
                 ItemQuantity = ex.itemQuantity,
             };
+        }
+        public static GetExchangeDTO AsGetEchangeDTO(Exchange ex)
+        {
+            return new GetExchangeDTO()
+            {
+                Id = ex.Id,
+                Sender = ex.sender.Id,
+                Reciever = ex.reciever.Id,
+                ItemName = ex.itemName,
+                ItemDescription = ex.itemDescription,
+                ItemQuantity = ex.itemQuantity,
+            };
+            
         }
     }
 }

@@ -1,13 +1,13 @@
-import React, { useContext, useRef} from "react";
+import React, { useContext, useRef } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/Modal";
 import ModalContext from "../../../Context/UI/modal-context";
 import { useDispatch } from "react-redux";
-import {sendNewUser} from "../../../Context/Users/users-redux-actions";
+import { sendNewUser } from "../../../Context/Users/users-redux-actions";
 
 function AddUser(props) {
-  const modalCtx = useContext(ModalContext)
+  const modalCtx = useContext(ModalContext);
   const mc = modalCtx.setter;
 
   const namefieldRef = useRef();
@@ -15,7 +15,7 @@ function AddUser(props) {
   const emailfieldRef = useRef();
   const phonefieldRef = useRef();
 
-  const dsp = useDispatch()
+  const dsp = useDispatch();
 
   function onCloseHandle(oldData) {
     mc({
@@ -24,7 +24,12 @@ function AddUser(props) {
     });
   }
   function onSaveHandle(oldData) {
-    const emptyFields = checkNoNulls([namefieldRef, clfieldRef, emailfieldRef, phonefieldRef]);
+    const emptyFields = checkNoNulls([
+      namefieldRef,
+      clfieldRef,
+      emailfieldRef,
+      phonefieldRef,
+    ]);
     if (emptyFields.length !== 0) {
       emptyFields.forEach((f) => {
         f.current.className = "form-control bg-danger";
@@ -36,11 +41,12 @@ function AddUser(props) {
         name: namefieldRef.current.value,
         userType: clfieldRef.current.value,
         email: emailfieldRef.current.value,
-        phone: phonefieldRef.current.value
+        phone: phonefieldRef.current.value,
       })
     );
     onCloseHandle(oldData);
   }
+  
   function onInputClarity(event) {
     // event..className = "form-control"
     event.target.className = "form-control";
@@ -108,7 +114,6 @@ function AddUser(props) {
         </Button>
       </Modal.Footer>
     </Form>
-
   );
 }
 

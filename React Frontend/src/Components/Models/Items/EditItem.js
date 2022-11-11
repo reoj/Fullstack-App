@@ -4,17 +4,21 @@ import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/Modal";
 import ModalContext from "../../../Context/modal-context";
 import { useDispatch } from "react-redux";
-import { editItemR } from "../../../Context/items-redux-slice";
+import { sendEditItem } from "../../../Context/items-redux-actions";
 
 function EditItem(props) {
   const modalCtx = useContext(ModalContext);
   const mc = modalCtx.setter;
 
+  const descfieldRef = useRef();
   const ownerfieldRef = useRef();
-  const descfieldRef = useRef()
-  const stfieldRef = useRef()
+  const inamecfieldRef = useRef();
+  const qtfieldRef = useRef();
 
   const dsp = useDispatch();
+
+  const stGuID = (props.item.id).toString();
+
 
   function onCloseHandle(oldData) {
     mc({
@@ -23,7 +27,12 @@ function EditItem(props) {
     });
   }
   function onSaveHandle(oldData) {
-    const emptyFields = checkNoNulls([descfieldRef, ownerfieldRef, stfieldRef]);
+    const emptyFields = checkNoNulls([
+      descfieldRef,
+      ownerfieldRef,
+      inamecfieldRef,
+      qtfieldRef,
+    ]);
     if (emptyFields.length !== 0) {
       emptyFields.forEach((f) => {
         f.current.className = "form-control bg-danger";
@@ -31,11 +40,12 @@ function EditItem(props) {
       return;
     }
     dsp(
-      editItemR({
-        id: props.item.id,
-        desc: descfieldRef.current.value,
-        owner: ownerfieldRef.current.value,
-        state:stfieldRef.current.value
+      sendEditItem({
+        ItemId: stGuID,
+        Name: inamecfieldRef.current.value,
+        Description: descfieldRef.current.value,
+        Quantity: qtfieldRef.current.value,
+        UserId: ownerfieldRef.current.value,
       })
     );
     onCloseHandle(oldData);
@@ -56,6 +66,16 @@ function EditItem(props) {
   return (
     <Form>
       <Modal.Body>
+      <Form.Group className="mb-3" controlId="form_Name">
+          <Form.Label>Item Name</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Item Name"
+            ref={inamecfieldRef}
+            onFocus={onInputClarity}
+            defaultValue={props.item.name}
+          />
+        </Form.Group>
         <Form.Group className="mb-3" controlId="form_Desc">
           <Form.Label>Description</Form.Label>
           <Form.Control
@@ -63,17 +83,17 @@ function EditItem(props) {
             placeholder="Item Description"
             ref={descfieldRef}
             onFocus={onInputClarity}
-            defaultValue={props.item.desc}
+            defaultValue={props.item.description}
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="form_Owner">
-          <Form.Label>State</Form.Label>
+          <Form.Label>Quantity</Form.Label>
           <Form.Control
             type="text"
-            placeholder="Item State"
-            ref={stfieldRef}
+            placeholder="Item Quantity"
+            ref={qtfieldRef}
             onFocus={onInputClarity}
-            defaultValue={props.item.st}
+            defaultValue={props.item.quantity}
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="form_Owner">
@@ -83,7 +103,7 @@ function EditItem(props) {
             placeholder="Numeric ID of owner"
             ref={ownerfieldRef}
             onFocus={onInputClarity}
-            defaultValue={props.item.owner}
+            defaultValue={props.item.userId}
           />
         </Form.Group>
       </Modal.Body>

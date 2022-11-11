@@ -10,37 +10,47 @@ function AddItem(props) {
   const descfieldRef = useRef();
   const ownerfieldRef = useRef();
   const inamecfieldRef = useRef();
-  const qtfieldRef = useRef()
+  const qtfieldRef = useRef();
 
   const dsp = useDispatch();
 
-  const modalCtx = useContext(ModalContext)
+  const modalCtx = useContext(ModalContext);
   const modalController = modalCtx.setter;
 
+  // Modal Acctions
   function onCloseHandle(oldData) {
     modalController({
       ...oldData,
       onDisplay: false,
     });
   }
+
   function onSaveHandle(oldData) {
-    const emptyFields = checkNoNulls([descfieldRef, ownerfieldRef, inamecfieldRef, qtfieldRef]);
+    const emptyFields = checkNoNulls([
+      descfieldRef,
+      ownerfieldRef,
+      inamecfieldRef,
+      qtfieldRef,
+    ]);
     if (emptyFields.length !== 0) {
       emptyFields.forEach((f) => {
         f.current.className = "form-control bg-danger";
       });
       return;
     }
+    // Call for Dispatch
     dsp(
       sendNewItem({
         name: inamecfieldRef.current.value,
-        desc: descfieldRef.current.value,
+        description: descfieldRef.current.value,
         quantity: qtfieldRef.current.value,
-        owner: ownerfieldRef.current.value,
+        userId: ownerfieldRef.current.value,
       })
     );
     onCloseHandle(oldData);
   }
+
+  // Auxiliary Function ToDo: Custom Hook
   function checkNoNulls(arrayOfRefs) {
     const allEmptyFields = [];
     arrayOfRefs.forEach((r) => {
@@ -51,14 +61,13 @@ function AddItem(props) {
     return allEmptyFields;
   }
   function onInputClarity(event) {
-    // event..className = "form-control"
     event.target.className = "form-control";
   }
   return (
     <Form>
       <Modal.Body>
-      <Form.Group className="mb-3" controlId="form_Name">
-          <Form.Label>Description</Form.Label>
+        <Form.Group className="mb-3" controlId="form_Name">
+          <Form.Label>Item Name</Form.Label>
           <Form.Control
             type="text"
             placeholder="Item Name"

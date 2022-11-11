@@ -4,7 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import ModalContext from "../../../Context/modal-context";
 import { useDispatch } from "react-redux";
 import Table from "react-bootstrap/Table";
-import { removeItemR } from "../../../Context/items-redux-slice";
+import { sendDeleteItem } from "../../../Context/items-redux-actions";
 
 function DeleteItem(props) {
   const modalCtx = useContext(ModalContext);
@@ -19,7 +19,7 @@ function DeleteItem(props) {
     });
   }
   function onSaveHandle(oldData) {
-    dsp(removeItemR(props.item.id));
+    dsp(sendDeleteItem(props.item.id));
     onCloseHandle(oldData);
   }
 

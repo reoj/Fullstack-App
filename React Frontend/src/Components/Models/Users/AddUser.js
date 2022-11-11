@@ -4,7 +4,7 @@ import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/Modal";
 import ModalContext from "../../../Context/modal-context";
 import { useDispatch } from "react-redux";
-import { addUserR } from "../../../Context/user-redux-slice";
+import { sendNewUser } from "../../../Context/users-redux-actions";
 
 function AddUser(props) {
   const modalCtx = useContext(ModalContext)
@@ -12,6 +12,8 @@ function AddUser(props) {
 
   const namefieldRef = useRef();
   const clfieldRef = useRef();
+  const emailfieldRef = useRef();
+  const phonefieldRef = useRef();
 
   const dsp = useDispatch()
 
@@ -22,7 +24,7 @@ function AddUser(props) {
     });
   }
   function onSaveHandle(oldData) {
-    const emptyFields = checkNoNulls([namefieldRef, clfieldRef]);
+    const emptyFields = checkNoNulls([namefieldRef, clfieldRef, emailfieldRef, phonefieldRef]);
     if (emptyFields.length !== 0) {
       emptyFields.forEach((f) => {
         f.current.className = "form-control bg-danger";
@@ -30,9 +32,11 @@ function AddUser(props) {
       return;
     }
     dsp(
-      addUserR({
+      sendNewUser({
         name: namefieldRef.current.value,
-        cl: clfieldRef.current.value,
+        userType: clfieldRef.current.value,
+        email: emailfieldRef.current.value,
+        phone: phonefieldRef.current.value
       })
     );
     onCloseHandle(oldData);
@@ -70,6 +74,26 @@ function AddUser(props) {
             type="text"
             placeholder="User Class"
             ref={clfieldRef}
+            onFocus={onInputClarity}
+            defaultValue={""}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="form_Name">
+          <Form.Label>E-mail</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="user@email.com"
+            ref={emailfieldRef}
+            onFocus={onInputClarity}
+            defaultValue={""}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="form_Name">
+          <Form.Label>Phone</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="000-000-0000"
+            ref={phonefieldRef}
             onFocus={onInputClarity}
             defaultValue={""}
           />

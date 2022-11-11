@@ -11,9 +11,9 @@ export const itemSlice = createSlice({
       nwList.push({
         id: action.payload.id,
         name: action.payload.name,
-        description: action.payload.desc,
-        quantity: action.payload.state,
-        owner: action.payload.owner,
+        description: action.payload.description,
+        quantity: action.payload.quantity,
+        userId: action.payload.userId,
       });
       state.value.list = nwList;
     },

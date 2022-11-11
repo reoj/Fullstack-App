@@ -3,7 +3,7 @@ import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/Modal";
 import ModalContext from "../../../Context/modal-context";
 import { useDispatch } from "react-redux";
-import { removeUser } from "../../../Context/user-redux-slice";
+import { sendDeleteUser } from "../../../Context/users-redux-actions";
 import Table from "react-bootstrap/Table";
 
 function DeleteUser(props) {
@@ -19,7 +19,7 @@ function DeleteUser(props) {
     });
   }
   function onSaveHandle(oldData) {
-    dsp(removeUser(props.item.id));
+    dsp(sendDeleteUser(props.item.id));
     onCloseHandle(oldData);
   }
 

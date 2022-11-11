@@ -20,7 +20,7 @@ function TradesList() {
           return (
             <TradeSingle 
             key={"Trade__" + t.id}
-            id={t.id}
+            idn={t.id}
             sender={t.sender}
             Reciever={t.reciever}
             itemName={t.itemName}

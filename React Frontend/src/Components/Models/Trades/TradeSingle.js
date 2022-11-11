@@ -26,7 +26,7 @@ function TradeSingle(props) {
   }
   return (
     <tr>
-      <td>{props.id}</td>
+      <td>{props.idn}</td>
       <td>{props.sender}</td>
       <td>{props.Reciever}</td>
       <td>{props.itemName}</td>

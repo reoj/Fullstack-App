@@ -21,7 +21,7 @@ function RevertTrade(props) {
     });
   }
   function onSaveHandle(oldData) {
-    dsp(sendDeleteTrade(props.item.id));
+    dsp(sendDeleteTrade(JSON.parse(cTrade.id)));
     onCloseHandle(oldData);
   }
 
@@ -64,7 +64,7 @@ function RevertTrade(props) {
           Close
         </Button>
         <Button variant="danger" onClick={onSaveHandle}>
-          DeleteUser
+          RevertTrade
         </Button>
       </Modal.Footer>
     </Fragment>

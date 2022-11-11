@@ -1,5 +1,3 @@
-using DotnetBackend.Models;
-
 namespace DotnetBackend.DTOs
 {
     public class CreateExchangeDTO

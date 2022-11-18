@@ -65,10 +65,9 @@ namespace DotnetBackend.Services.Inventory
                     Description = ci.Description,
                     Quantity = ci.Quantity,
                     UserId = ci.UserId,
+                    // The Owner of the new Item is the target User
+                    Owner = targetUser
                 };
-
-                // The Owner of the new Item is the target User
-                nw.Owner = targetUser;
 
                 // Apply changes to the user Inventory
                 await _repo.Items.AddAsync(nw);
@@ -155,7 +154,7 @@ namespace DotnetBackend.Services.Inventory
                 old.Quantity = ci.Quantity;
                 old.Name = ci.Name;
                 old.Description = ci.Description;
-                old.UserId = ci.userId;
+                old.UserId = ci.UserId;
 
                 await _repo.SaveChangesAsync();
                 return new GetItemDTO(old);
@@ -174,10 +173,10 @@ namespace DotnetBackend.Services.Inventory
         /// <exception cref="NullReferenceException">When the UserID doesn't exists in the DB</exception>
         public async Task<List<InventoryItem>> GetItemsOfUser(int userId)
         {
-            List<InventoryItem> userInv = new();
+            List<InventoryItem> userInv;
             try
             {
-                var targetUser = await this._uService.GetUserRaw(userId);
+                var targetUser = await _uService.GetUserRaw(userId);
                 userInv = ServiceHelper<List<InventoryItem>>.NoNullsAccepted(targetUser.Items);
             }
             catch (Exception err)

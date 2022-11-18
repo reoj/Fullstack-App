@@ -16,8 +16,8 @@ namespace DotnetBackend.Services.ExchangeServices
 
         public ExchangeService(DataContext context, IInventoryService iserv, IUserService userv)
         {
-            this._userv = userv;
-            this._iserv = iserv;
+            _userv = userv;
+            _iserv = iserv;
             _repo = context;
         }
         public async Task<ServiceResponse<GetExchangeDTO>> EnactExchange(CreateExchangeDTO toCreate)
@@ -162,17 +162,18 @@ namespace DotnetBackend.Services.ExchangeServices
                         $"The Item requested Item is not in the inventory of user with ID: {ce.Sender}");
                 }
             }
-            catch (Exception)
+            catch (Exception err)
             {
 
-                throw;
+                throw new ExchangeException(err.Message);
             }
 
         }
 
         private async Task<User> AwaitUserRequest(int userId)
         {
-            return ServiceHelper<User>.NoNullsAccepted(await _userv.GetUserRaw(userId));
+            return ServiceHelper<User>.NoNullsAccepted(
+                await _userv.GetUserRaw(userId));
         }
 
 
@@ -182,6 +183,7 @@ namespace DotnetBackend.Services.ExchangeServices
                 .Include(e=>e.sender)
                 .Include(e=>e.reciever)
                 .FirstOrDefaultAsync(u => u.Id == idn);
+
             return Mappings.AsCreateExchangeDTO(ServiceHelper<Exchange>.NoNullsAccepted(requested));
         }
         private class ExchangeException : Exception

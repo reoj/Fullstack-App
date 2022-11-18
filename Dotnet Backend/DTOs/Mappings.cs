@@ -21,7 +21,7 @@ namespace users_items_backend.DTOs
                 Name = it.Name,
                 Description = it.Description,
                 Quantity = it.Quantity,
-                userId = it.UserId,
+                UserId = it.UserId,
             };
         }
 

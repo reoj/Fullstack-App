@@ -11,6 +11,6 @@ namespace DotnetBackend.DTOs
         public string Name { get; set; } = "Out of Stock";
         public string Description { get; set; } = "";
         public int Quantity { get; set; }
-        public int userId { get; set; }
+        public int UserId { get; set; }
     }
 }

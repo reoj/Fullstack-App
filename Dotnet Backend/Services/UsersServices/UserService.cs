@@ -32,7 +32,8 @@ namespace DotnetBackend.Services.UserServices
                 };
                 var added = await _repo.Users.AddAsync(nw);
                 _ = await _repo.SaveChangesAsync();
-                return ServiceHelper<User>.NoNullsAccepted(await _repo.Users.FirstOrDefaultAsync(u => u.Phone == nw.Phone));
+                return ServiceHelper<User>.NoNullsAccepted(
+                    await _repo.Users.FirstOrDefaultAsync(u => u.Phone == nw.Phone));
             }
             return await ServiceHelper<User>.ActionHandler(rawCreation, nwUser);
         }
@@ -74,6 +75,7 @@ namespace DotnetBackend.Services.UserServices
                 var oldUser = await _repo.Users
                     .Include(u => u.Items)
                     .FirstOrDefaultAsync(u => u.Id == ci.UserId);
+
                 oldUser = ServiceHelper<User>.NoNullsAccepted(oldUser);
 
                 oldUser.UserType = nwUser.UserType;

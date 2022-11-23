@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using DotnetBackend.Services.UserServices;
 using DotnetBackend.Services.Inventory;
 using DotnetBackend.Services.ExchangeServices;
+using DotnetBackend.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,8 +16,9 @@ builder.Services.AddDbContext<DataContext>(options =>
 });
 
 // Add services to the container.
+builder.Services.AddControllers( options => options.Filters.Add<ErrorHanldingFilterAttribute>() );
 
-builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen( // Enabling the authentication for Swagger UI
@@ -41,6 +43,7 @@ builder.Services.AddSwaggerGen( // Enabling the authentication for Swagger UI
 //builder.Services.AddScoped<StaticData>();
 // Add services to the container.
 
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IInventoryService, ItemService>();
 builder.Services.AddScoped<IExchangeService, ExchangeService>();

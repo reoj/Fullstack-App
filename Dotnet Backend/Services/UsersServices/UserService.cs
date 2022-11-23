@@ -27,7 +27,7 @@ namespace DotnetBackend.Services.UserServices
                 {
                     Name = current.Name,
                     Phone = current.Phone,
-                    Email = current.Email,
+                    Email = current.Email.ToLower(),
                     UserType = (UserType_Enum)current.UserType
                 };
                 var added = await _repo.Users.AddAsync(nw);

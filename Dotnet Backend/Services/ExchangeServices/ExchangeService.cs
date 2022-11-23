@@ -79,7 +79,7 @@ namespace DotnetBackend.Services.ExchangeServices
             catch (Exception err)
             {
 
-                throw new ExchangeException(err.Message);
+                throw new ServiceHelper<Exchange>.ServiceException(err.Message);
             }
             return sr;
         }
@@ -153,19 +153,19 @@ namespace DotnetBackend.Services.ExchangeServices
                         string msj = "The Requests couldn't be compleated:";
                         msj += $"On Adding:{responseFromAdding.Message}";
                         msj += $"\nOn Updating{responseFromUpdating.Message}";
-                        throw new ExchangeException(msj);
+                        throw new ServiceHelper<Exchange>.ServiceException(msj);
                     }
                 }
                 else
                 {
-                    throw new ExchangeException(
+                    throw new ServiceHelper<Exchange>.ServiceException(
                         $"The Item requested Item is not in the inventory of user with ID: {ce.Sender}");
                 }
             }
             catch (Exception err)
             {
 
-                throw new ExchangeException(err.Message);
+                throw new ServiceHelper<Exchange>.ServiceException(err.Message);
             }
 
         }
@@ -186,10 +186,7 @@ namespace DotnetBackend.Services.ExchangeServices
 
             return Mappings.AsCreateExchangeDTO(ServiceHelper<Exchange>.NoNullsAccepted(requested));
         }
-        private class ExchangeException : Exception
-        {
-            public ExchangeException(string Message) : base(message: Message) { }
-        }
+        
         #endregion
     }
 }

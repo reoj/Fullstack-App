@@ -1,4 +1,5 @@
 using DotnetBackend.Models;
+using System.Security.Cryptography.X509Certificates;
 
 namespace DotnetBackend.Services
 {
@@ -37,14 +38,14 @@ namespace DotnetBackend.Services
         /// </summary>
         /// <param name="toCheck">the variable to check for nulls</param>
         /// <returns>The recieved object if it's not null</returns>
-        /// <exception cref="NullReferenceException"></exception>
+        /// <exception cref="ServiceException"></exception>
         public static T NoNullsAccepted(T? toCheck)
         {
             try
             {
                 if (toCheck is null)
                 {
-                    throw new NullReferenceException(
+                    throw new (
                         $"No object could be found with that information");
                 }
                 return toCheck;
@@ -53,8 +54,17 @@ namespace DotnetBackend.Services
             {
                 throw;
             }
+
         }
 
+        #endregion
+        #region Custom Exception
+        public class ServiceException : Exception
+        {
+            public ServiceException(string Message) : base(Message)
+            {
+            }
+        } 
         #endregion
     }
 }

@@ -15,15 +15,12 @@ function AddItem(props) {
 
   const dsp = useDispatch();
 
-  const modalCtx = useContext(ModalContext);
-  const modalController = modalCtx.setter;
+  const cntx = useContext(ModalContext);
+  const modalDispatch = cntx.setter;
 
   // Modal Acctions
-  function onCloseHandle(oldData) {
-    modalController({
-      ...oldData,
-      onDisplay: false,
-    });
+  function onCloseHandle() {
+    modalDispatch({type:"CLOSE"})
   }
 
   function onSaveHandle(oldData) {

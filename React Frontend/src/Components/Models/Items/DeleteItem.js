@@ -7,16 +7,13 @@ import Table from "react-bootstrap/Table";
 import { sendDeleteItem } from "../../../Context/Items/items-redux-actions";
 
 function DeleteItem(props) {
-  const modalCtx = useContext(ModalContext);
-  const mc = modalCtx.setter;
+  const cntx = useContext(ModalContext);
+  const modalDispatch = cntx.setter;
 
   const dsp = useDispatch();
 
   function onCloseHandle(oldData) {
-    mc({
-      ...oldData,
-      onDisplay: false,
-    });
+    modalDispatch({type:"CLOSE"})
   }
   function onSaveHandle(oldData) {
     dsp(sendDeleteItem(props.item.id));

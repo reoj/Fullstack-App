@@ -7,16 +7,13 @@ import { useDispatch } from "react-redux";
 import Table from "react-bootstrap/Table";
 
 function DeleteUser(props) {
-  const modalCtx = useContext(ModalContext);
-  const mc = modalCtx.setter;
+  const cntx = useContext(ModalContext);
+  const modalDispatch = cntx.setter;
 
   const dsp = useDispatch();
 
   function onCloseHandle(oldData) {
-    mc({
-      ...oldData,
-      onDisplay: false,
-    });
+    modalDispatch({type:"CLOSE"})
   }
   function onSaveHandle(oldData) {
     dsp(sendDeleteUser(props.item.id));

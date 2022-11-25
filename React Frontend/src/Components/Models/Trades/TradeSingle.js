@@ -4,24 +4,26 @@ import ModalContext from "../../../Context/UI/modal-context";
 import RevertTrade from "./RevertTrade";
 
 function TradeSingle(props) {
-  const context = useContext(ModalContext);
-  const mc = context.setter;
+  const cntx = useContext(ModalContext);
+  const modalDispatch = cntx.setter;
 
   function onDeleteHandler(params) {
-    mc({
-      onDisplay: true,
-      title: "Please confirm that you wish to revert this trade",
-      body: (
-        <RevertTrade
-          item={{
-            id: props.idn,
-            sender: props.sender,
-            Reciever: props.Reciever,
-            itemName: props.itemName,
-            itemQuantity: props.itemQuantity,
-          }}
-        />
-      ),
+    modalDispatch({
+      type: "OPEN",
+      payload: {
+        title: "Please confirm that you wish to revert this trade",
+        body: (
+          <RevertTrade
+            item={{
+              id: props.idn,
+              sender: props.sender,
+              Reciever: props.Reciever,
+              itemName: props.itemName,
+              itemQuantity: props.itemQuantity,
+            }}
+          />
+        ),
+      },
     });
   }
   return (
@@ -32,7 +34,11 @@ function TradeSingle(props) {
       <td>{props.itemName}</td>
       <td>{props.itemDescription}</td>
       <td>{props.itemQuantity}</td>
-      <td><Button className="btn btn-danger" onClick={onDeleteHandler}>Revert</Button></td>
+      <td>
+        <Button className="btn btn-danger" onClick={onDeleteHandler}>
+          Revert
+        </Button>
+      </td>
     </tr>
   );
 }

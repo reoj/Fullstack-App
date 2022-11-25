@@ -8,8 +8,8 @@ import { sendNewTrade } from "../../../Context/Trades/trade-redux-actions";
 import { checkNoNulls } from "../../Helpers/CheckNoNulls";
 
 function EnactTrade() {
-  const modalCtx = useContext(ModalContext);
-  const mc = modalCtx.setter;
+  const cntx = useContext(ModalContext);
+  const modalDispatch = cntx.setter;
 
   const senderfieldRef = useRef();
   const recieverfieldRef = useRef();
@@ -20,10 +20,7 @@ function EnactTrade() {
   const dsp = useDispatch();
 
   function onCloseHandle(oldData) {
-    mc({
-      ...oldData,
-      onDisplay: false,
-    });
+    modalDispatch({type:"CLOSE"})
   }
 
   function onSaveHandle(oldData) {

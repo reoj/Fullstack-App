@@ -8,8 +8,8 @@ import { sendEditItem } from "../../../Context/Items/items-redux-actions";
 import { checkNoNulls } from "../../Helpers/CheckNoNulls";
 
 function EditItem(props) {
-  const modalCtx = useContext(ModalContext);
-  const mc = modalCtx.setter;
+  const cntx = useContext(ModalContext);
+  const modalDispatch = cntx.setter;
 
   const descfieldRef = useRef();
   const ownerfieldRef = useRef();
@@ -22,10 +22,7 @@ function EditItem(props) {
 
 
   function onCloseHandle(oldData) {
-    mc({
-      ...oldData,
-      onDisplay: false,
-    });
+    modalDispatch({type:"CLOSE"})
   }
   function onSaveHandle(oldData) {
     const emptyFields = checkNoNulls([

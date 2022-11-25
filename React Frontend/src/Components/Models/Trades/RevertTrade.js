@@ -9,16 +9,13 @@ import { sendDeleteTrade } from "../../../Context/Trades/trade-redux-actions";
 function RevertTrade(props) {
   const cTrade = props.item;
 
-  const modalCtx = useContext(ModalContext);
-  const mc = modalCtx.setter;
+  const cntx = useContext(ModalContext);
+  const modalDispatch = cntx.setter;
 
   const dsp = useDispatch();
 
   function onCloseHandle(oldData) {
-    mc({
-      ...oldData,
-      onDisplay: false,
-    });
+    modalDispatch({type:"CLOSE"})
   }
   function onSaveHandle(oldData) {
     dsp(sendDeleteTrade(JSON.parse(cTrade.id)));

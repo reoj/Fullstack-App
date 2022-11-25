@@ -1,26 +1,24 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
 
 import Modal from "react-bootstrap/Modal";
+import ModalContext from "../../Context/UI/modal-context";
 
 function CustomModal(props) {
-  const st = props.status;
+  const contxt = useContext(ModalContext);
+  const st = contxt.properties;
+  const dspatch = contxt.setter;
 
-  function onCloseHandle(oldData) {
-    props.controller({
-      ...oldData,
-      onDisplay: false,
-    });
+  function onCloseHandle() {
+    dspatch({type:"CLOSE"})
   }
-    
+
   return (
     <Modal show={st.onDisplay} onHide={onCloseHandle}>
       <Modal.Header closeButton>
         <Modal.Title>{st.title}</Modal.Title>
       </Modal.Header>
 
-      <Fragment>
-        {st.body}        
-      </Fragment>
+      <Fragment>{st.body}</Fragment>
     </Modal>
   );
 }

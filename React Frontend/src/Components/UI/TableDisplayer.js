@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import OffcanvasHeader from "react-bootstrap/esm/OffcanvasHeader";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
@@ -7,50 +7,40 @@ import AddItem from "../Models/Items/AddItem";
 import ModalContext from "../../Context/UI/modal-context";
 import CustomModal from "./CustomModal";
 import EnactTrade from "../Models/Trades/EnactTrade";
+import ModalContextHandler from "../../Context/ModalContextHandler";
 
 function TableDisplayer(props) {
   const fielsList = props.colList;
-
-  const [modalProperties, setModalProperties] = useState({
-    onDisplay: false,
-    title: "",
-    message: {},
-  });
   
+  const cntx = useContext(ModalContext);
+  const modalProperties = cntx.properties;
+  const dsp = cntx.setter;
+
   function AddHandler() {
     if (props.modelType === "Users") {
-      setModalProperties({
-        onDisplay: true,
-        title: "Adding User",
-        body: <AddUser />,
+      dsp({
+        type: "OPEN",
+        payload: { title: "Adding User", body: <AddUser /> },
       });
     }
     if (props.modelType === "Items") {
-      setModalProperties({
-        onDisplay: true,
-        title: "Adding Item",
-        body: <AddItem />,
+      dsp({
+        type: "OPEN",
+        payload: { title: "Adding Item", body: <AddItem /> },
       });
     }
     if (props.modelType === "Trades") {
-      setModalProperties({
-        onDisplay: true,
-        title: "Adding Item",
-        body: <EnactTrade/>,
+      dsp({
+        type: "OPEN",
+        payload: { title: "New trade", body: <EnactTrade /> },
       });
     }
   }
 
   return (
     <div className="table-responsive">
-      <ModalContext.Provider
-        value={{ properties: modalProperties, setter: setModalProperties }}
-      >
         {modalProperties.onDisplay && (
-          <CustomModal
-            status={modalProperties}
-            controller={setModalProperties}
-          />
+          <CustomModal/>
         )}
         <OffcanvasHeader className="fs-3 mb-3 col-1 w-50">
           {props.modelType}
@@ -82,7 +72,6 @@ function TableDisplayer(props) {
           </thead>
           <tbody className="table-group-divider">{props.children}</tbody>
         </Table>
-      </ModalContext.Provider>
     </div>
   );
 }

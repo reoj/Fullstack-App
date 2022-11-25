@@ -8,41 +8,46 @@ import EditUser from "./EditUser";
 import { editUserR } from "../../../Context/Users/user-redux-slice";
 
 function UserSingle(props) {
-  const context = useContext(ModalContext);
-  const mc = context.setter;
-  function onEditHandler(params) {
-    mc({
-      onDisplay: true,
-      title: "Editing User",
-      body: (
-        <EditUser
-          inhf={editUserR}
-          item={{
-            id: props.idn,
-            name: props.name,
-            cl: props.cl,
-            email: props.email,
-            phone: props.phone,
-          }}
-        />
-      ),
+  const cntx = useContext(ModalContext);
+  const modalDispatch = cntx.setter;
+
+  function onEditHandler() {
+    modalDispatch({
+      type: "OPEN",
+      payload: {
+        title: "Editing User",
+        body: (
+          <EditUser
+            inhf={editUserR}
+            item={{
+              id: props.idn,
+              name: props.name,
+              cl: props.cl,
+              email: props.email,
+              phone: props.phone,
+            }}
+          />
+        ),
+      },
     });
   }
-  function onDeleteHandler(params) {
-    mc({
-      onDisplay: true,
-      title: "Please confirm deletion of the following User",
-      body: (
-        <DeleteUser
-          item={{
-            id: props.idn,
-            name: props.name,
-            cl: props.cl,
-            email: props.email,
-            phone: props.phone,
-          }}
-        />
-      ),
+  function onDeleteHandler() {
+    modalDispatch({
+      type: "OPEN",
+      payload: {
+        title: "Please confirm deletion of the following User",
+        body: (
+          <DeleteUser
+            item={{
+              id: props.idn,
+              name: props.name,
+              cl: props.cl,
+              email: props.email,
+              phone: props.phone,
+            }}
+          />
+        ),
+      },
     });
   }
   return (

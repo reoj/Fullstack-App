@@ -5,41 +5,45 @@ import DeleteItem from "./DeleteItem";
 import EditItem from "./EditItem";
 
 function ItemSingle(props) {
-  const context = useContext(ModalContext);
-  const mc = context.setter;
+  const cntx = useContext(ModalContext);
+  const modalDispatch = cntx.setter;
 
-  function onEditHandler(params) {
-    mc({
-      onDisplay: true,
-      title: "Editing Item",
-      body: (
-        <EditItem
-          item={{
-            id: props.idn,
-            name: props.name,
-            description: props.description,
-            quantity: props.quantity,
-            userId: props.owner,
-          }}
-        />
-      ),
+  function onEditHandler() {
+    modalDispatch({
+      type: "OPEN",
+      payload: {
+        title: "Editing Item",
+        body: (
+          <EditItem
+            item={{
+              id: props.idn,
+              name: props.name,
+              description: props.description,
+              quantity: props.quantity,
+              userId: props.owner,
+            }}
+          />
+        ),
+      },
     });
   }
 
   function onDeleteHandler(params) {
-    mc({
-      onDisplay: true,
-      title: "Please confirm deletion of the following Item",
-      body: (
-        <DeleteItem
-          item={{
-            id: props.idn,
-            desc: props.description,
-            st: props.state,
-            owner: props.owner,
-          }}
-        />
-      ),
+    modalDispatch({
+      type: "OPEN",
+      payload: {
+        title: "Please confirm deletion of the following Item",
+        body: (
+          <DeleteItem
+            item={{
+              id: props.idn,
+              desc: props.description,
+              st: props.state,
+              owner: props.owner,
+            }}
+          />
+        ),
+      },
     });
   }
   return (

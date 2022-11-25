@@ -9,8 +9,8 @@ import { checkNoNulls } from "../../Helpers/CheckNoNulls";
 
 
 function EditUser(props) {
-  const modalCtx = useContext(ModalContext);
-  const mc = modalCtx.setter;
+  const cntx = useContext(ModalContext);
+  const modalDispatch = cntx.setter;
 
   const namefieldRef = useRef();
   const clfieldRef = useRef();
@@ -20,10 +20,7 @@ function EditUser(props) {
   const dsp = useDispatch();
 
   function onCloseHandle(oldData) {
-    mc({
-      ...oldData,
-      onDisplay: false,
-    });
+    modalDispatch({type:"CLOSE"})
   }
   function onSaveHandle(oldData) {
     const emptyFields = checkNoNulls([namefieldRef, clfieldRef]);

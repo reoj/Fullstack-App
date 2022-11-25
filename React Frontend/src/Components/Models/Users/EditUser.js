@@ -19,7 +19,7 @@ function EditUser(props) {
 
   const dsp = useDispatch();
 
-  function onCloseHandle(oldData) {
+  function onCloseHandle() {
     modalDispatch({type:"CLOSE"})
   }
   function onSaveHandle(oldData) {

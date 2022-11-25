@@ -11,23 +11,20 @@ function UserSingle(props) {
   const cntx = useContext(ModalContext);
   const modalDispatch = cntx.setter;
 
+  const single = {
+    id: props.idn,
+    name: props.name,
+    cl: props.cl,
+    email: props.email,
+    phone: props.phone,
+  };
+
   function onEditHandler() {
     modalDispatch({
       type: "OPEN",
       payload: {
         title: "Editing User",
-        body: (
-          <EditUser
-            inhf={editUserR}
-            item={{
-              id: props.idn,
-              name: props.name,
-              cl: props.cl,
-              email: props.email,
-              phone: props.phone,
-            }}
-          />
-        ),
+        body: <EditUser item={single} />,
       },
     });
   }
@@ -36,17 +33,7 @@ function UserSingle(props) {
       type: "OPEN",
       payload: {
         title: "Please confirm deletion of the following User",
-        body: (
-          <DeleteUser
-            item={{
-              id: props.idn,
-              name: props.name,
-              cl: props.cl,
-              email: props.email,
-              phone: props.phone,
-            }}
-          />
-        ),
+        body: <DeleteUser item={single} />,
       },
     });
   }

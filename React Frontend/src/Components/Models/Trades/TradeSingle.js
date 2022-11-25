@@ -7,6 +7,14 @@ function TradeSingle(props) {
   const cntx = useContext(ModalContext);
   const modalDispatch = cntx.setter;
 
+  const single = {
+    id: props.idn,
+    sender: props.sender,
+    Reciever: props.Reciever,
+    itemName: props.itemName,
+    itemQuantity: props.itemQuantity,
+  }
+
   function onDeleteHandler(params) {
     modalDispatch({
       type: "OPEN",
@@ -14,13 +22,7 @@ function TradeSingle(props) {
         title: "Please confirm that you wish to revert this trade",
         body: (
           <RevertTrade
-            item={{
-              id: props.idn,
-              sender: props.sender,
-              Reciever: props.Reciever,
-              itemName: props.itemName,
-              itemQuantity: props.itemQuantity,
-            }}
+            item={single}
           />
         ),
       },

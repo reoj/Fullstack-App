@@ -37,11 +37,11 @@ function DeleteItem(props) {
             </tr>
             <tr>
               <td className='fw-bold'>Description: </td>
-              <td >{props.item.desc}</td>
+              <td >{props.item.description}</td>
             </tr>
             <tr>
               <td className='fw-bold'>Owner: </td>
-              <td >{props.item.owner}</td>
+              <td >{props.item.userId}</td>
             </tr>
           </tbody>
         </Table>

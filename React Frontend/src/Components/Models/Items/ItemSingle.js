@@ -8,6 +8,14 @@ function ItemSingle(props) {
   const cntx = useContext(ModalContext);
   const modalDispatch = cntx.setter;
 
+  const single = {
+    id: props.idn,
+    name: props.name,
+    description: props.description,
+    quantity: props.quantity,
+    userId: props.owner,
+  };
+
   function onEditHandler() {
     modalDispatch({
       type: "OPEN",
@@ -15,13 +23,7 @@ function ItemSingle(props) {
         title: "Editing Item",
         body: (
           <EditItem
-            item={{
-              id: props.idn,
-              name: props.name,
-              description: props.description,
-              quantity: props.quantity,
-              userId: props.owner,
-            }}
+            item={single}
           />
         ),
       },
@@ -35,12 +37,7 @@ function ItemSingle(props) {
         title: "Please confirm deletion of the following Item",
         body: (
           <DeleteItem
-            item={{
-              id: props.idn,
-              desc: props.description,
-              st: props.state,
-              owner: props.owner,
-            }}
+            item={single}
           />
         ),
       },

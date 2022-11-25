@@ -5,6 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import { useDispatch } from "react-redux";
 import { sendNewItem } from "../../../Context/Items/items-redux-actions";
 import ModalContext from "../../../Context/UI/modal-context";
+import { checkNoNulls } from "../../Helpers/CheckNoNulls";
 
 function AddItem(props) {
   const descfieldRef = useRef();
@@ -50,16 +51,6 @@ function AddItem(props) {
     onCloseHandle(oldData);
   }
 
-  // Auxiliary Function ToDo: Custom Hook
-  function checkNoNulls(arrayOfRefs) {
-    const allEmptyFields = [];
-    arrayOfRefs.forEach((r) => {
-      if (r.current.value === "") {
-        allEmptyFields.push(r);
-      }
-    });
-    return allEmptyFields;
-  }
   function onInputClarity(event) {
     event.target.className = "form-control";
   }

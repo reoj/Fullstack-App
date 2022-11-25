@@ -11,7 +11,7 @@ function Layout() {
     <Fragment>
       <Navbar />
       <Provider store={store}>
-      <MainDisplay></MainDisplay>
+      <MainDisplay/>
       <StatusCard/>
       </Provider>
     </Fragment>

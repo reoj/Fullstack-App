@@ -5,6 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import ModalContext from "../../../Context/UI/modal-context";
 import { useDispatch } from "react-redux";
 import { sendNewUser } from "../../../Context/Users/users-redux-actions";
+import { checkNoNulls } from "../../Helpers/CheckNoNulls";
 
 function AddUser(props) {
   const modalCtx = useContext(ModalContext);
@@ -50,15 +51,6 @@ function AddUser(props) {
   function onInputClarity(event) {
     // event..className = "form-control"
     event.target.className = "form-control";
-  }
-  function checkNoNulls(arrayOfRefs) {
-    const allEmptyFields = [];
-    arrayOfRefs.forEach((r) => {
-      if (r.current.value === "") {
-        allEmptyFields.push(r);
-      }
-    });
-    return allEmptyFields;
   }
 
   return (

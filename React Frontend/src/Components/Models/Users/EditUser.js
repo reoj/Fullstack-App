@@ -5,6 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import ModalContext from "../../../Context/UI/modal-context";
 import { useDispatch } from "react-redux";
 import { sendEditUser } from "../../../Context/Users/users-redux-actions";
+import { checkNoNulls } from "../../Helpers/CheckNoNulls";
 
 
 function EditUser(props) {
@@ -46,15 +47,7 @@ function EditUser(props) {
   function onInputClarity(event) {
     event.target.className = "form-control";
   }
-  function checkNoNulls(arrayOfRefs) {
-    const allEmptyFields = [];
-    arrayOfRefs.forEach((r) => {
-      if (r.current.value === "") {
-        allEmptyFields.push(r);
-      }
-    });
-    return allEmptyFields;
-  }
+
   return (
     <Form>
       <Modal.Body>

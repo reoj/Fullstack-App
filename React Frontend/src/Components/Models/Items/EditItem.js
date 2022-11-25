@@ -5,6 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import ModalContext from "../../../Context/UI/modal-context";
 import { useDispatch } from "react-redux";
 import { sendEditItem } from "../../../Context/Items/items-redux-actions";
+import { checkNoNulls } from "../../Helpers/CheckNoNulls";
 
 function EditItem(props) {
   const modalCtx = useContext(ModalContext);
@@ -49,15 +50,6 @@ function EditItem(props) {
       })
     );
     onCloseHandle(oldData);
-  }
-  function checkNoNulls(arrayOfRefs) {
-    const allEmptyFields = [];
-    arrayOfRefs.forEach((r) => {
-      if (r.current.value === "") {
-        allEmptyFields.push(r);
-      }
-    });
-    return allEmptyFields;
   }
   function onInputClarity(event) {
     event.target.className = "form-control";

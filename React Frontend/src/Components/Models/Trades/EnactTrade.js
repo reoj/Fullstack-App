@@ -5,6 +5,7 @@ import ModalContext from "../../../Context/UI/modal-context";
 import { useDispatch } from "react-redux";
 import Button from "react-bootstrap/esm/Button";
 import { sendNewTrade } from "../../../Context/Trades/trade-redux-actions";
+import { checkNoNulls } from "../../Helpers/CheckNoNulls";
 
 function EnactTrade() {
   const modalCtx = useContext(ModalContext);
@@ -23,15 +24,6 @@ function EnactTrade() {
       ...oldData,
       onDisplay: false,
     });
-  }
-  function checkNoNulls(arrayOfRefs) {
-    const allEmptyFields = [];
-    arrayOfRefs.forEach((r) => {
-      if (r.current.value === "") {
-        allEmptyFields.push(r);
-      }
-    });
-    return allEmptyFields;
   }
 
   function onSaveHandle(oldData) {

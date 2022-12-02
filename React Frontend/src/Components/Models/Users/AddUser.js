@@ -6,6 +6,7 @@ import ModalContext from "../../../Context/UI/modal-context";
 import { useDispatch } from "react-redux";
 import { sendNewUser } from "../../../Context/Users/users-redux-actions";
 import { checkNoNulls } from "../../Helpers/CheckNoNulls";
+import CustomFormGroup from "../../UI/CustomFormGroup";
 
 function AddUser(props) {
   const cntx = useContext(ModalContext);
@@ -19,7 +20,7 @@ function AddUser(props) {
   const dsp = useDispatch();
 
   function onCloseHandle(oldData) {
-    modalDispatch({type:"CLOSE"})
+    modalDispatch({ type: "CLOSE" });
   }
   function onSaveHandle(oldData) {
     const emptyFields = checkNoNulls([
@@ -42,57 +43,36 @@ function AddUser(props) {
         phone: phonefieldRef.current.value,
       })
     );
-    onCloseHandle(oldData);
-  }
-  
-  function onInputClarity(event) {
-    // event..className = "form-control"
-    event.target.className = "form-control";
+    onCloseHandle();
   }
 
   return (
     <Form>
       <Modal.Body>
-        <Form.Group className="mb-3" controlId="form_Name">
-          <Form.Label>Name</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="User Name"
-            ref={namefieldRef}
-            onFocus={onInputClarity}
-            defaultValue={""}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="form_Name">
-          <Form.Label>Class</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="User Class"
-            ref={clfieldRef}
-            onFocus={onInputClarity}
-            defaultValue={""}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="form_Name">
-          <Form.Label>E-mail</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="user@email.com"
-            ref={emailfieldRef}
-            onFocus={onInputClarity}
-            defaultValue={""}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="form_Name">
-          <Form.Label>Phone</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="000-000-0000"
-            ref={phonefieldRef}
-            onFocus={onInputClarity}
-            defaultValue={""}
-          />
-        </Form.Group>
+        <CustomFormGroup
+          controlId="form_Name"
+          label="Name"
+          placeholder="User Name"
+          reference={namefieldRef}
+        ></CustomFormGroup>
+        <CustomFormGroup
+          controlId="form_class"
+          label="Class"
+          placeholder="User Class"
+          reference={clfieldRef}
+        ></CustomFormGroup>
+        <CustomFormGroup
+          controlId="form_mail"
+          label="E-mail"
+          placeholder="user@email.com"
+          reference={emailfieldRef}
+        ></CustomFormGroup>
+        <CustomFormGroup
+          controlId="form_tel"
+          label="Phone"
+          placeholder="000-000-0000"
+          reference={phonefieldRef}
+        ></CustomFormGroup>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onCloseHandle}>

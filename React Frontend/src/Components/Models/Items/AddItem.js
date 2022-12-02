@@ -1,10 +1,11 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/Modal";
-import { useDispatch } from "react-redux";
 import { sendNewItem } from "../../../Context/Items/items-redux-actions";
 import ModalContext from "../../../Context/UI/modal-context";
+import CustomFormGroup from "../../UI/CustomFormGroup";
+import { useDispatch } from "react-redux";
 import { checkNoNulls } from "../../Helpers/CheckNoNulls";
 
 function AddItem(props) {
@@ -13,84 +14,78 @@ function AddItem(props) {
   const inamecfieldRef = useRef();
   const qtfieldRef = useRef();
 
-  const dsp = useDispatch();
-
   const cntx = useContext(ModalContext);
   const modalDispatch = cntx.setter;
 
+  const dsp = useDispatch();
+
+  const arrayOfRefs = [
+    descfieldRef,
+    ownerfieldRef,
+    inamecfieldRef,
+    qtfieldRef,
+  ];
+
   // Modal Acctions
+  function onCloseHandle() {
+    modalDispatch({ type: "CLOSE" });
+  }
   function onCloseHandle() {
     modalDispatch({type:"CLOSE"})
   }
 
-  function onSaveHandle(oldData) {
-    const emptyFields = checkNoNulls([
-      descfieldRef,
-      ownerfieldRef,
-      inamecfieldRef,
-      qtfieldRef,
-    ]);
+  function onSaveHandle() {
+    const emptyFields = checkNoNulls(arrayOfRefs);
     if (emptyFields.length !== 0) {
       emptyFields.forEach((f) => {
         f.current.className = "form-control bg-danger";
       });
       return;
     }
+    const dataForDispatch = {
+      name: inamecfieldRef.current.value,
+      description: descfieldRef.current.value,
+      quantity: qtfieldRef.current.value,
+      userId: ownerfieldRef.current.value,
+    };
+
     // Call for Dispatch
     dsp(
-      sendNewItem({
-        name: inamecfieldRef.current.value,
-        description: descfieldRef.current.value,
-        quantity: qtfieldRef.current.value,
-        userId: ownerfieldRef.current.value,
-      })
+      sendNewItem(dataForDispatch)
     );
-    onCloseHandle(oldData);
+    onCloseHandle();
   }
-
-  function onInputClarity(event) {
-    event.target.className = "form-control";
+  
+  function onSaveHandle(oldData) {
+    
   }
   return (
     <Form>
       <Modal.Body>
-        <Form.Group className="mb-3" controlId="form_Name">
-          <Form.Label>Item Name</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Item Name"
-            ref={inamecfieldRef}
-            onFocus={onInputClarity}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="form_Desc">
-          <Form.Label>Description</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Item Description"
-            ref={descfieldRef}
-            onFocus={onInputClarity}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="form_Owner">
-          <Form.Label>Quantity</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Item Quantity"
-            ref={qtfieldRef}
-            onFocus={onInputClarity}
-            defaultValue={""}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="form_Owner">
-          <Form.Label>Owner</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Numeric ID of owner"
-            ref={ownerfieldRef}
-            onFocus={onInputClarity}
-          />
-        </Form.Group>
+        <CustomFormGroup
+          controlId="form_Name"
+          label="Item Name"
+          placeholder="Item Name"
+          reference={inamecfieldRef}
+        ></CustomFormGroup>
+        <CustomFormGroup
+          controlId="form_Desc"
+          label="Description"
+          placeholder="Item Description"
+          reference={descfieldRef}
+        ></CustomFormGroup>
+        <CustomFormGroup
+          controlId="form_Quantity"
+          label="Quantity"
+          placeholder="Item Quantity"
+          reference={qtfieldRef}
+        ></CustomFormGroup>
+        <CustomFormGroup
+          controlId="form_Owner"
+          label="Owner"
+          placeholder="Numeric ID of owner"
+          reference={ownerfieldRef}
+        ></CustomFormGroup>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onCloseHandle}>

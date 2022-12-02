@@ -6,7 +6,7 @@ namespace users_items_backend.Context
     /// <summary>
     /// Implements the DataBase context for all Models
     /// </summary>
-    public class DataContext : DbContext
+    public class DataContext : DbContext, IDataContext
     {
 
         #region Default Constructor

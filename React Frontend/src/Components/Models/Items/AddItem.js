@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useRef } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/Modal";
@@ -30,9 +30,6 @@ function AddItem(props) {
   function onCloseHandle() {
     modalDispatch({ type: "CLOSE" });
   }
-  function onCloseHandle() {
-    modalDispatch({type:"CLOSE"})
-  }
 
   function onSaveHandle() {
     const emptyFields = checkNoNulls(arrayOfRefs);
@@ -56,9 +53,6 @@ function AddItem(props) {
     onCloseHandle();
   }
   
-  function onSaveHandle(oldData) {
-    
-  }
   return (
     <Form>
       <Modal.Body>

@@ -1,84 +1,76 @@
+using DotnetBackend.Controllers;
+using DotnetBackend.DTOs;
 using DotnetBackend.Models;
 using DotnetBackend.Services.UserServices;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Expressions;
 using Moq;
-
 using users_items_backend.Context;
 
 namespace TestProject1
 {
     public class ControllersTest
     {
-        private UserService _userService;
 
         [Fact]
         public async Task GetUsers_Returns_ServiceResponseAsync()
         {
             // Arrange
             var num = 1;
-
-            var it = new List<InventoryItem>() { };
-
             var usenN = new User()
             {
-                Id = 1,
+                Id = num,
                 Name = "Test",
-                Email = "email",
-                Items = it,
-                UserType = UserType_Enum.Soldier,
+                Email = "test@email.com"
             };
-
-            var fake_table = new List<User>() { usenN };
-            var options = new DbContextOptionsBuilder<DataContext>()
-                      .UseSqlite("Data Source=:memory:")
-                      .Options;
-
-            var context_fake = new Mock<DataContext>(options);
-
-
-            //context_fake.SetupGet(m => m.Users).Returns(DbContextMock.GetQueryableMockDbSet(fake_table));
-            context_fake.As<IDataContext>().Setup(m => m.Users).Returns(DbContextMock.GetQueryableMockDbSet(fake_table));
-
-            context_fake.Setup(u => u.SaveChanges()).Returns(1);
-
-            var fake_serv = new Mock<UserService>(context_fake.Object);
-
-            _userService = fake_serv.Object;
-
+            var context = GetDataContext();
+            context.Database.EnsureCreated();
+            context.Users.Add(usenN);
+            context.SaveChanges();
+            var service = new UserService(context);
 
             // Act
-            var response = await _userService.GetAllUsers();
-
+            var response = await service.GetUser(num);
 
             // Assert
-            var result_succ = response.Successfull;
-            
+            var result_succ = response.Successfull;            
             Assert.Equivalent(true, result_succ);
         }
-       
-        public static class DbContextMock
+        [Fact]
+        public async Task GetUserFromController()
         {
-            public static DbSet<T> GetQueryableMockDbSet<T>(List<T> sourceList) where T : class
+            //Arrange
+            var userId = 1;
+            ServiceResponse<GetUserDTO> response = new ServiceResponse<GetUserDTO>()
             {
-                var queryable = sourceList.AsQueryable();
-                
-                var dbSet = new Mock<DbSet<T>>();
-                dbSet.As<IQueryable<T>>().Setup(m => m.Provider)
-                    .Returns(queryable.Provider);
-                dbSet.As<IQueryable<T>>().Setup(m => m.Expression)
-                    .Returns(queryable.Expression);
-                dbSet.As<IQueryable<T>>().Setup(m => m.ElementType)
-                    .Returns(queryable.ElementType);
-                dbSet.As<IQueryable<T>>().Setup(m => m.GetEnumerator())
-                    .Returns(() => queryable.GetEnumerator());
-                
-                
-                dbSet.Setup(d => d.Add(It.IsAny<T>()))
-                    .Callback<T>((s) => sourceList.Add(s));
+                Message = "Succesfull",
+                Successfull = true,
+                Body = new GetUserDTO(new User()),
+            };
 
-                return dbSet.Object;
-            }
+            var fakeService = GetMokOfUserService();
+            fakeService.Setup(us => us.GetUser(userId)).Returns(Task.FromResult(response));
+            var controller = new UsersController(fakeService.Object);
+
+            //Act
+            var controllerResult = await controller.GetUser(userId);
+            Assert.NotNull(controllerResult);
+        }
+
+        public Mock<IUserService> GetMokOfUserService()
+        {
+            return new Mock<IUserService>();
+        }
+        public DataContext GetDataContext()
+        {
+            var options = new DbContextOptionsBuilder<DataContext>()
+                      .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                      .Options;
+
+            var dataContext = new DataContext(options);
+            dataContext.Database.EnsureCreated();
+            return dataContext;
         }
     }
-    
+
 }

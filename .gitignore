@@ -1,3 +1,6 @@
 /.vscode
 Dotnet Backend/UserNItems.db-shm
 Dotnet Backend/UserNItems.db-wal
+TestProject1/obj/Debug/net6.0/TestProject1.GeneratedMSBuildEditorConfig.editorconfig
+TestProject1/obj/Debug/net6.0/TestProject1.assets.cache
+TestProject1/bin/Debug/net6.0/CoverletSourceRootsMapping

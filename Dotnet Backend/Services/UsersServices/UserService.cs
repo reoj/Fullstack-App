@@ -43,10 +43,11 @@ namespace DotnetBackend.Services.UserServices
             async Task<GetUserDTO> rawGetter(object obj)
             {
                 var idn = (int)obj;
-                var requested = await _repo.Users
-                    .Include(u => u.Items)
-                    .FirstOrDefaultAsync(u => u.Id == idn);
-                requested = ServiceHelper<User>.NoNullsAccepted(requested);
+                var requested = await GetUserRaw(idn);
+                //var requested = await _repo.Users
+                //    .Include(u => u.Items)
+                //    .FirstOrDefaultAsync(u => u.Id == idn);
+                //requested = ServiceHelper<User>.NoNullsAccepted(requested);
                 return new GetUserDTO(requested);
             }
             return await ServiceHelper<GetUserDTO>.ActionHandler(rawGetter, id);

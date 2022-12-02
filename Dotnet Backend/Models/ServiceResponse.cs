@@ -23,5 +23,12 @@ namespace DotnetBackend.Models
         /// Aditional Information relevant to the state of the response. If an exception occurrs, the exception message can be copied here
         /// </summary>
         public String Message { get; set; } = "Success";
+
+        public override string ToString()
+        {
+            string result = $"This response was {Successfull}\n";
+            result += $"Containing the message: {this.Message}";
+            return result;
+        }
     }
 }

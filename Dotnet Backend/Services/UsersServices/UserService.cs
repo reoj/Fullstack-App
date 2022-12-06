@@ -24,8 +24,8 @@ namespace DotnetBackend.Services.UserServices
         /// <summary>
         /// Creates a user
         /// </summary>
-        /// <param name="newUserInformation"></param>
-        /// <returns></returns>
+        /// <param name="newUserInformation">Object containing the necessary data to create a new User</param>
+        /// <returns>An async ServiceResponse containing the infromation of the User from the Repository</returns>
         public async Task<ServiceResponse<User>> CreateUser(CreateUserDTO newUserInformation)
         {
             return await ServiceHelper<User>.HandleAnActionInsideAServiceResponse(CreateUserFromDto, newUserInformation);
@@ -35,7 +35,7 @@ namespace DotnetBackend.Services.UserServices
         /// Reads a User
         /// </summary>
         /// <param name="id">The Unique userID for the User</param>
-        /// <returns></returns>
+        /// <returns>An async ServiceResponse with the User requested</returns>
         public async Task<ServiceResponse<GetUserDTO>> GetUser(int id)
         {
 
@@ -45,7 +45,7 @@ namespace DotnetBackend.Services.UserServices
         /// <summary>
         /// Reads A list with All Users
         /// </summary>
-        /// <returns>An async ServiceResponde containing A list with all Users in repository</returns>
+        /// <returns>An async ServiceResponse containing A list with all Users in repository</returns>
         public async Task<ServiceResponse<List<GetUserDTO>>> GetAllUsers()
         {
 

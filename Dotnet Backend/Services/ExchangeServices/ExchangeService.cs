@@ -34,7 +34,7 @@ namespace DotnetBackend.Services.ExchangeServices
             }
             return sr;
             // Func<CreateExchangeDTO, bool, Task<GetExchangeDTO>> invExchangeHandler = this.InventoryExchangeHandler;
-            // return await ServiceHelper<GetExchangeDTO>.ActionHandler(invExchangeHandler,(object)toCreate,false);
+            // return await ServiceHelper<GetExchangeDTO>.HandleAnActionInsideAServiceResponse(invExchangeHandler,(object)toCreate,false);
         }
 
         public async Task<ServiceResponse<List<GetExchangeDTO>>> GetAllExchanges()
@@ -50,7 +50,7 @@ namespace DotnetBackend.Services.ExchangeServices
                 exchanges.ForEach(e => dtoExchanges.Add(Mappings.AsGetEchangeDTO(e)));
                 return dtoExchanges;
             };
-            return await ServiceHelper<List<GetExchangeDTO>>.ActionHandler(rawGet, 0);
+            return await ServiceHelper<List<GetExchangeDTO>>.HandleAnActionInsideAServiceResponse(rawGet, 0);
         }
 
         public async Task<ServiceResponse<GetExchangeDTO>> GetExchange(Guid requested)
@@ -64,7 +64,7 @@ namespace DotnetBackend.Services.ExchangeServices
                 return Mappings.AsGetEchangeDTO(ServiceHelper<Exchange>.NoNullsAccepted(requested));
             }
 
-            return await ServiceHelper<GetExchangeDTO>.ActionHandler(rawGetter, requested);
+            return await ServiceHelper<GetExchangeDTO>.HandleAnActionInsideAServiceResponse(rawGetter, requested);
         }
 
         public async Task<ServiceResponse<GetExchangeDTO>> RevertExchange(Guid toDelete)
@@ -173,7 +173,7 @@ namespace DotnetBackend.Services.ExchangeServices
         private async Task<User> AwaitUserRequest(int userId)
         {
             return ServiceHelper<User>.NoNullsAccepted(
-                await _userv.GetUserRaw(userId));
+                await _userv.GetUserFromDataRepo(userId));
         }
 
 

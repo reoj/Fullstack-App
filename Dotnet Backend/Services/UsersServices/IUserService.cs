@@ -13,6 +13,6 @@ namespace DotnetBackend.Services.UserServices
         Task<ServiceResponse<List<GetUserDTO>>> GetAllUsers();
         Task<ServiceResponse<GetUserDTO>> UpdateUser(UpdateUserDTO nwUser);
         Task<ServiceResponse<GetUserDTO>> DeleteUser(int id);
-        Task<User> GetUserRaw(int idn);
+        Task<User> GetUserFromDataRepo(int idn);
     }
 }

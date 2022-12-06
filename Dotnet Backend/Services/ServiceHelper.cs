@@ -12,26 +12,16 @@ namespace DotnetBackend.Services
         /// <param name="fn">The Function to execute and get data from</param>
         /// <param name="arg">The expected argument of that function</param>
         /// <returns>An async Service response that reflects the state of the request</returns>
-        public static async Task<ServiceResponse<T>> ActionHandler(
+        public static async Task<ServiceResponse<T>> HandleAnActionInsideAServiceResponse(
             Func<object, Task<T>> fn, params object[] args)
         {
-            var response = new ServiceResponse<T>();
-            try
-            {
-                //Atempt to create a successfull response with the data given
-                response.Body = await fn(args[0]);
-                response.Successfull = true;
-            }
-            catch (Exception err)
-            {
-                //The Request couldn't be completed as given
-                response.Successfull = false;
-                string relevant =
-                    $"The request couldn't be completed because of the following error: {err.Message}";
-                response.Message = relevant;
-            }
-            return response;
+            return await TryToExecute(fn, args);
         }
+
+        public static async Task<ServiceResponse<T>> HandleAnActionInsideAServiceResponse(Func<Task<T>> fn)
+        {
+            return await TryToExecute(fn);
+        }        
 
         /// <summary>
         /// Ensures that a given variable is not null
@@ -57,8 +47,54 @@ namespace DotnetBackend.Services
 
         }
 
+        #region Private Methods
+        private static async Task<ServiceResponse<T>> TryToExecute(Func<object, Task<T>> fn, object[] args)
+        {
+            var response = new ServiceResponse<T>();
+            try
+            {
+                //Atempt to create a successfull response with the data given
+                response.Body = await fn(args[0]);
+                response.Successfull = true;
+            }
+            catch (Exception err)
+            {
+                PopulateErrorResponse(response, err);
+            }
+            return response;
+        }
+        private static async Task<ServiceResponse<T>> TryToExecute(Func<Task<T>> fn)
+        {
+            var response = new ServiceResponse<T>();
+            try
+            {
+                //Atempt to create a successfull response with the data given
+                response.Body = await fn();
+                response.Successfull = true;
+            }
+            catch (Exception err)
+            {
+                PopulateErrorResponse(response, err);
+            }
+            return response;
+        }
+        private static void PopulateErrorResponse(ServiceResponse<T> response, Exception err)
+        {
+            //The Request couldn't be completed as given
+            response.Successfull = false;
+            string relevant =
+                $"The request couldn't be completed because of the following error: {err.Message}";
+            response.Message = relevant;
+        }
+        
+        #endregion
+
         #endregion
         #region Custom Exception
+
+        /// <summary>
+        /// Service Exception to be caught by the Problem Handling Filter
+        /// </summary>
         public class ServiceException : Exception
         {
             public ServiceException(string Message) : base(Message)

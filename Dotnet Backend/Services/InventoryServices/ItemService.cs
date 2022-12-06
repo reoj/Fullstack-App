@@ -36,7 +36,7 @@ namespace DotnetBackend.Services.Inventory
                 var ci = (CreateIttemDTO)obj;
 
                 // Request the user to the User service
-                var targetUser = await _uService.GetUserRaw(ci.UserId);
+                var targetUser = await _uService.GetUserFromDataRepo(ci.UserId);
 
                 // If this Item already exists in the user's inventory, just increase the quantity
                 if (IsItemInList(await GetItemsOfUser(ci.UserId), ci.Name, ci.Description))
@@ -77,7 +77,7 @@ namespace DotnetBackend.Services.Inventory
                 return new GetItemDTO(nw);
             }
 
-            return await ServiceHelper<GetItemDTO>.ActionHandler(rawCreation, currenItem);
+            return await ServiceHelper<GetItemDTO>.HandleAnActionInsideAServiceResponse(rawCreation, currenItem);
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace DotnetBackend.Services.Inventory
 
                 return new GetItemDTO(old);
             }
-            return await ServiceHelper<GetItemDTO>.ActionHandler(rawElimination, id);
+            return await ServiceHelper<GetItemDTO>.HandleAnActionInsideAServiceResponse(rawElimination, id);
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace DotnetBackend.Services.Inventory
                 return new GetItemDTO(ServiceHelper<InventoryItem>.NoNullsAccepted(requested));
             }
 
-            return await ServiceHelper<GetItemDTO>.ActionHandler(rawGetter, id);
+            return await ServiceHelper<GetItemDTO>.HandleAnActionInsideAServiceResponse(rawGetter, id);
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace DotnetBackend.Services.Inventory
                 items.ForEach(i => dtoItems.Add(new GetItemDTO(i)));
                 return dtoItems;
             };
-            return await ServiceHelper<List<GetItemDTO>>.ActionHandler(rawGet, 0);
+            return await ServiceHelper<List<GetItemDTO>>.HandleAnActionInsideAServiceResponse(rawGet, 0);
 
         }
 
@@ -159,7 +159,7 @@ namespace DotnetBackend.Services.Inventory
                 await _repo.SaveChangesAsync();
                 return new GetItemDTO(old);
             }
-            return await ServiceHelper<GetItemDTO>.ActionHandler(rawUpdate, currenItem);
+            return await ServiceHelper<GetItemDTO>.HandleAnActionInsideAServiceResponse(rawUpdate, currenItem);
         }
 
         #endregion
@@ -176,7 +176,7 @@ namespace DotnetBackend.Services.Inventory
             List<InventoryItem> userInv;
             try
             {
-                var targetUser = await _uService.GetUserRaw(userId);
+                var targetUser = await _uService.GetUserFromDataRepo(userId);
                 userInv = ServiceHelper<List<InventoryItem>>.NoNullsAccepted(targetUser.Items);
             }
             catch (Exception err)

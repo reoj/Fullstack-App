@@ -103,7 +103,7 @@ namespace DotnetBackend.Services.UserServices
             var updatedUser = (UpdateUserDTO)obj;
             var oldUser = await GetUserFromDataRepo(updatedUser.UserId);
 
-            // Update fields one by one
+            // Act: Update fields one by one
             oldUser.UserType = updatedUser.UserType;
             oldUser.Email = updatedUser.Email;
             oldUser.Name = updatedUser.Name;
@@ -112,15 +112,15 @@ namespace DotnetBackend.Services.UserServices
             // Save
             await DataRepository.SaveChangesAsync();
 
-            //Return
+            // Return
             return new GetUserDTO(oldUser);
         }
         private async Task<User> CreateUserFromDto(object obj)
         {
-            // Cast the Argument as an object that contains the information to create the User
+            // Retrieve
             var creationInformation = (CreateUserDTO)obj;
 
-            // Generate the new User boject 
+            // act: Generate the new User object 
             User inCreation = new()
             {
                 Name = creationInformation.Name,
@@ -128,9 +128,9 @@ namespace DotnetBackend.Services.UserServices
                 Email = creationInformation.Email.ToLower(),
                 UserType = (UserType_Enum)creationInformation.UserType
             };
+            var added = await DataRepository.Users.AddAsync(inCreation);
 
             // Save in Repository 
-            var added = await DataRepository.Users.AddAsync(inCreation);
             _ = await DataRepository.SaveChangesAsync();
 
             // Return
